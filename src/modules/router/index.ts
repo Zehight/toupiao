@@ -4,14 +4,9 @@ import launchRouterGuard from './routerGuard'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/notfount',
-    name: 'NotFound',
-    component: () => import('@/views/common/NotFound.vue')
-  },
-  {
     path: '/',
     name: 'Index',
-    component: () => import('@/views/menu1/test1.vue')
+    redirect: {name: 'test1'}
   },
   {
     path: '/test1',
