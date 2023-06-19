@@ -2,14 +2,14 @@
 
 </script>
 
+
 <template>
   <TheContainer>
-    test3
+    hahaha
   </TheContainer>
 </template>
 
+<style>
 
-
-<style scoped>
 
 </style>
