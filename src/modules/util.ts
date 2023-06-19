@@ -1,6 +1,6 @@
-export const phoneValidate = (phone: string) => /^[1][3-9][0-9]{9}$/.test(phone)
+const phoneValidate = (phone: string) => /^[1][3-9][0-9]{9}$/.test(phone)
 
-export function renderFileSize(value: string) {
+function renderFileSize(value: string) {
   if (!value) return '0 Bytes'
   const unitArr = [
     'Bytes',
@@ -21,10 +21,22 @@ export function renderFileSize(value: string) {
   return size + unitArr[index]
 }
 
+function fullScreen() {
+  const element = document.documentElement
+  if (element.requestFullscreen) {
+    element.requestFullscreen()
+  }
+}
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen()
+  }
+}
+
 /**
  * 加载js
  */
-export const loadJs = (url: string) => {
+const loadJs = (url: string) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.type = 'text/javascript'
@@ -35,9 +47,18 @@ export const loadJs = (url: string) => {
   })
 }
 
-export const randomNumber = (start: number, end: number) => {
+const randomNumber = (start: number, end: number) => {
   if (end < start) {
     return false
   }
   return Math.round(Math.random() * (end - start) + start)
+}
+
+export default {
+  phoneValidate,
+  renderFileSize,
+  fullScreen,
+  exitFullscreen,
+  loadJs,
+  randomNumber,
 }

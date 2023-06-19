@@ -10,19 +10,37 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "skipLibCheck": true,
-    "types": ["element-plus/global"],
     "allowJs": true,
     "checkJs": true,
-    "strictPropertyInitialization": true, // 强制初始化类属性检查
+    "strictPropertyInitialization": true,
+    // 强制初始化类属性检查
     // 解决 @ alias 的问题
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": [
+        "src/*"
+      ]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "config.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

@@ -10,13 +10,13 @@ import {
 // 默认配置
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_APP_BASEURL,
-  timeout: 30000,
+  timeout: 10000,
   maxContentLength: 2000,
   /*允许携带cookie*/
   withCredentials: false, // 表示跨域请求时是否需要使用凭证, 默认false
   headers: {
     'Content-Type': 'application/json;charset=UTF-8',
-    'Authorization': 'Bearer ' + localStorage.getItem('token') || '',
+    'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
   },
 })
 

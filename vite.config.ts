@@ -2,39 +2,26 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 import * as path from 'path'
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import { Vuetify3Resolver } from 'unplugin-vue-components/resolvers'
+
+const projectRootDir = path.resolve(__dirname)
+
 
 const pathSrc = path.resolve(__dirname, 'src')
-
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-
 // https://vitejs.dev/config/
-export default ({mode, command}) => {
+export default () => {
   return defineConfig({
-    envDir: path.resolve(__dirname, 'env'),
+    envDir: path.resolve(projectRootDir, 'env'),
     base: '/', // 二级目录
     resolve: {
       alias: [
         {
           find: '@',
-          replacement: pathSrc,
+          replacement: path.resolve(projectRootDir, 'src'),
         },
       ],
-    },
-    server: {
-      port: 3000,
-      proxy: {
-        '/api/': {
-          //target: 'http://127.0.0.1:5000',
-          target: 'http://localhost:5001',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
-      },
-      hmr: true,
     },
     plugins: [
       vue(),
@@ -59,11 +46,8 @@ export default ({mode, command}) => {
           }
         ],
         resolvers: [
-          ElementPlusResolver(),
+          Vuetify3Resolver(),
           // 自动导入图标组件
-          IconsResolver({
-            prefix: 'Icon',
-          }),
         ],
         dts: path.resolve(pathSrc, 'auto-imports.d.ts'),
       }),
@@ -71,16 +55,18 @@ export default ({mode, command}) => {
         dirs: ['src/components', 'src/assets', 'src/modules'],
         resolvers: [
           // 自动注册图标组件
-          IconsResolver({
-            enabledCollections: ['ep'],
-          }),
-          ElementPlusResolver(),
+          Vuetify3Resolver(),
         ],
         dts: path.resolve(pathSrc, 'components.d.ts'),
       }),
-      Icons({
-        autoInstall: true,
-      }),
-    ]
+    ],
+    css: {
+      /* CSS 预处理器 */
+      preprocessorOptions: {
+        scss: {
+          additionalData: '$injectedColor: orange;'
+        }
+      }
+    }
   })
 }
