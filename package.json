@@ -1,34 +1,32 @@
 {
-  "name": "real-name-system",
+  "name": "my-vue-app",
   "private": true,
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --mode dev",
     "prod": "vite --mode prod",
-    "builddev": "vite build --mode dev",
-    "buildprod": "vite build --mode prod",
-    "build": "vite build --mode prod",
+    "builddev": "vue-tsc --noEmit && vite build --mode dev",
+    "buildprod": "vue-tsc --noEmit && vite build --mode prod",
+    "build": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@element-plus/icons-vue": "^2.0.9",
+    "ant-design-vue": "^3.2.10",
     "axios": "^0.27.2",
     "countup.js": "^2.2.0",
     "echarts": "^5.3.3",
-    "element-plus": "^2.2.11",
     "moment": "^2.29.3",
     "pinia": "^2.0.14",
-    "qrcode.vue": "^3.4.0",
     "reset-css": "^5.0.1",
-    "vant": "^4.4.1",
     "vconsole": "^3.11.0",
     "vue": "^3.2.25",
-    "vue-router": "^4.0.16"
+    "vue-router": "^4.0.16",
+    "vuetify": "^3.3.4"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@vitejs/plugin-vue": "^3.1.0",
+    "@vitejs/plugin-vue": "^2.3.3",
     "@vue/cli-plugin-typescript": "~5.0.0",
     "autoprefixer": "^10.4.7",
     "cssnano": "^5.1.12",
@@ -40,11 +38,11 @@
     "postcss-px-to-viewport": "^1.1.1",
     "postcss-url": "^10.1.3",
     "postcss-write-svg": "^3.0.1",
-    "unplugin-auto-import": "^0.9.5",
-    "unplugin-icons": "^0.14.8",
+    "sass": "^1.63.4",
+    "unplugin-auto-import": "^0.9.1",
     "unplugin-vue-components": "^0.20.1",
-    "vite": "^3.1.0",
+    "vite": "^2.9.9",
     "vite-plugin-style-import": "^2.0.0",
-    "vue-tsc": "^0.40.4"
+    "vue-tsc": "^0.38.4"
   }
 }
