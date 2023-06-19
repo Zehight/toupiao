@@ -272,6 +272,7 @@ h1 + p, p + p {
   font-family: "Playfair Display";
   font-size: 36px;
   font-weight: 700;
+  color: #5D4037;
   text-shadow: rgba(black, 0.5) 0 10px 10px;
 }
 </style>

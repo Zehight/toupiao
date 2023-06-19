@@ -107,7 +107,7 @@ body {
 .card-info h1 {
   font-size: 36px;
   font-weight: 700;
-  text-shadow: rgba(black, 0.5) 10px 10px 10px;
+  text-shadow: rgba(black, 1) -3px 0px 10px;
 }
 
 p {
