@@ -26,6 +26,9 @@ const cardList = [
       <v-tab :value="2">第二届V萌</v-tab>
       <v-tab :value="3">第三届V萌</v-tab>
     </v-tabs>
+    <div class="d-flex justify-center ma-3 mt-6">
+      <v-btn size="large" elevation="2">添加轮次</v-btn>
+    </div>
     <v-window v-model="tab">
       <v-window-item :value="1">
         <v-list>
