@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
+// import { menuList } from '@/modules/router/routerGuard'
 
 export const useMenu = defineStore('menu', {
   state: () => ({
-    active: '',
+    active: '1',
     openeds: [] as string[],
+    // roleMenus: menuList
   }),
-  getters: {
-
-  },
+  getters: {},
   actions: {
     setActive(key: string) {
       this.active = key
@@ -18,6 +18,6 @@ export const useMenu = defineStore('menu', {
     removeOpeneds(key: string) {
       const index = this.openeds.indexOf(key)
       if (index !== -1) this.openeds.splice(index, 1)
-    }
-  }
+    },
+  },
 })
