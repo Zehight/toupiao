@@ -60,13 +60,14 @@ const aa = ref(false)
 <template>
   <div ref="card"
        class="card-wrap"
+       @click="aa=!aa"
        @mouseenter="handleMouseEnter"
        @mouseleave="handleMouseLeave"
        @mousemove="handleMouseMove">
     <div :class="aa?'selected':'normol'"
          :style="cardStyle"
          class="card"
-         @click="aa=!aa">
+    >
       <div :class="aa?'selectedBG':'normolBG'" :style="[cardBgTransform, cardBgImage]" class="card-bg"></div>
       <div style="position: absolute;top:0;bottom: 0;left:0;right:0;z-index: 5;background-color: black;opacity: 0"/>
       <div class="card-info">
@@ -272,6 +273,5 @@ h1 + p, p + p {
   font-size: 36px;
   font-weight: 700;
   color: #5D4037;
-  text-shadow: rgba(black, 0.5) 0 10px 10px;
 }
 </style>
