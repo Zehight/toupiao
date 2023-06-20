@@ -109,8 +109,24 @@ body {
 
 .card-info h1 {
   font-size: 36px;
+  line-height: 36px;
   font-weight: 700;
   text-shadow: rgba(black, 1) -3px 0px 10px;
+
+  @media screen and (max-width: 1024px) {
+    font-size: 18px;
+    line-height: 18px;
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1440px) {
+    font-size: 24px;
+    line-height: 24px;
+  }
+
+  @media screen and (min-width: 1440px) and (max-width: 1980px) {
+    font-size: 32px;
+    line-height: 32px;
+  }
 }
 
 p {
