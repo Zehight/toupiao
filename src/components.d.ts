@@ -22,6 +22,7 @@ declare module '@vue/runtime-core' {
     VListItemTitle: typeof import('vuetify/components')['VListItemTitle']
     VMain: typeof import('vuetify/components')['VMain']
     VNavigationDrawer: typeof import('vuetify/components')['VNavigationDrawer']
+    VRow: typeof import('vuetify/components')['VRow']
     VTab: typeof import('vuetify/components')['VTab']
     VTabs: typeof import('vuetify/components')['VTabs']
     VWindow: typeof import('vuetify/components')['VWindow']
