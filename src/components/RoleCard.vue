@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 const prop = defineProps(['dataImage'])
 
 const card: any = ref(null)
@@ -12,8 +12,8 @@ const mousePX = computed(() => mouseX.value / width.value)
 const mousePY = computed(() => mouseY.value / height.value)
 
 const cardStyle = computed(() => {
-  const rX = mousePX.value * 30
-  const rY = mousePY.value * -30
+  const rX = mousePX.value * 28
+  const rY = mousePY.value * -28
   return {
     transform: `rotateY(${rX}deg) rotateX(${rY}deg)`
   }
@@ -29,9 +29,7 @@ const cardBgTransform = computed(() => {
 
 const cardBgImage = computed(() => {
   return {
-    backgroundImage: `url(${prop.dataImage})`,
-    backgroundRepeat: 'repeat',
-    backgroundSize: '100% 100%',
+    backgroundImage: `url(${prop.dataImage})`
   }
 })
 
@@ -60,16 +58,17 @@ const aa = ref(false)
 </script>
 
 <template>
-  <div class="card-wrap"
-       @mousemove="handleMouseMove"
+  <div ref="card"
+       class="card-wrap"
+       @click="aa=!aa"
        @mouseenter="handleMouseEnter"
        @mouseleave="handleMouseLeave"
-       ref="card">
-    <div class="card"
-         @click="aa=!aa"
-         :class="aa?'selected':'normol'"
-         :style="cardStyle">
-      <div class="card-bg" :class="aa?'selectedBG':'normolBG'" :style="[cardBgTransform, cardBgImage]"></div>
+       @mousemove="handleMouseMove">
+    <div :class="aa?'selected':'normol'"
+         :style="cardStyle"
+         class="card"
+    >
+      <div :class="aa?'selectedBG':'normolBG'" :style="[cardBgTransform, cardBgImage]" class="card-bg"></div>
       <div style="position: absolute;top:0;bottom: 0;left:0;right:0;z-index: 5;background-color: black;opacity: 0"/>
       <div class="card-info">
         <slot name="header"></slot>
@@ -116,6 +115,7 @@ h1 + p, p + p {
 }
 
 .card-wrap {
+  width: 100%;
   margin: 10px;
   transform: perspective(800px);
   transform-style: preserve-3d;
@@ -155,7 +155,7 @@ h1 + p, p + p {
 .normol {
   position: relative;
   flex: 0 0 240px;
-  width: 240px;
+  width: 100%;
   height: 320px;
   background-color: #333;
   overflow: hidden;
@@ -169,7 +169,7 @@ h1 + p, p + p {
 .selected {
   position: relative;
   flex: 0 0 240px;
-  width: 240px;
+  width: 100%;
   height: 320px;
   background-color: #333;
   overflow: hidden;
@@ -218,11 +218,11 @@ h1 + p, p + p {
 .selectedBG {
   opacity: 1;
   position: absolute;
-  top: -20px;
-  right: -20px;
-  left: -20px;
-  bottom: -20px;
-  padding: 20px;
+  top: -40px;
+  right: -40px;
+  left: -40px;
+  bottom: -40px;
+  padding: 40px;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -273,6 +273,5 @@ h1 + p, p + p {
   font-size: 36px;
   font-weight: 700;
   color: #5D4037;
-  text-shadow: rgba(black, 0.5) 0 10px 10px;
 }
 </style>
