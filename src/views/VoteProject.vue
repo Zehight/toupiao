@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import test from '@/assets/OTLIN01.png'
 
 const tab = ref(1)
@@ -19,70 +19,67 @@ const cardList = [
   <TheContainer>
     <v-tabs
       v-model="tab"
-      color="deep-purple-accent-4"
       align-tabs="center"
+      color="deep-purple-accent-4"
     >
       <v-tab :value="1">第一届V萌</v-tab>
       <v-tab :value="2">第二届V萌</v-tab>
       <v-tab :value="3">第三届V萌</v-tab>
     </v-tabs>
     <div class="d-flex justify-center ma-3 mt-6">
-      <v-btn size="large" elevation="2">添加轮次</v-btn>
+      <v-btn elevation="2" size="large">添加轮次</v-btn>
     </div>
     <v-window v-model="tab">
       <v-window-item :value="1">
-        <v-list>
-          <v-list-item
-            v-for="(circleItem,index) in items" :key="index" class=" rounded border-t">
-            <v-list-item-title class="d-flex align-center pa-2">
-              <span class="text-h5">{{ circleItem.title }}</span>
-              <v-btn class="ml-3" elevation="0" variant="outlined">投入角色</v-btn>
-            </v-list-item-title>
-            <v-card elevation="0" class="pa-3 ma-3 ">
-              <v-card-actions class="justify-center">
-                <v-btn variant="tonal">推送</v-btn>
-                <v-btn variant="tonal">冻结</v-btn>
-              </v-card-actions>
-              <template v-slot:text>
-                <v-list rounded-0>
-                  <v-list-item v-for="item in cardList" :key="item" class="pa-0">
-                    <v-card :title="item.title" variant="tonal" class=" ma-2 pa-0">
-                      <v-row class="ma-0">
-                        <v-col cols="2" v-for="role in item.role" :key="role">
-                          <div class="cardArea">
-                            <RoleCard :data-image="test">
-                              <template #header>
-                                <h1> 嘉然Diana</h1>
-                              </template>
-                              <template #content>
-                                <p style="line-height: 20px;margin-top: 20px">
-                                  所属赛区：中国赛区<br>
-                                  所属企划：Asoul
-                                </p>
-                              </template>
-                            </RoleCard>
-                          </div>
-                        </v-col>
-                      </v-row>
-                    </v-card>
-                  </v-list-item>
-                </v-list>
-              </template>
-            </v-card>
-          </v-list-item>
-        </v-list>
+        <div
+          v-for="(circleItem,index) in items" :key="index" class=" rounded border-t">
+          <div class="d-flex align-center pa-2">
+            <span class="text-h5">{{ circleItem.title }}</span>
+            <v-btn class="ml-3" elevation="0" variant="outlined">投入角色</v-btn>
+          </div>
+          <v-card class="pa-0 ma-0 " elevation="0">
+            <v-card-actions class="justify-center">
+              <v-btn variant="tonal">推送</v-btn>
+              <v-btn variant="tonal">冻结</v-btn>
+            </v-card-actions>
+            <v-card-text class="pa-0 ma-0">
+              <v-card v-for="item in cardList" :key="item" :title="item.title" class="pa-0 ma-1"
+                      variant="tonal">
+                <v-container fluid>
+                  <v-row class="ma-0">
+                    <v-col v-for="role in item.role" :key="role" cols="12" lg="3" md="4" xs="6">
+                      <div class="cardArea">
+                        <RoleCard :data-image="test">
+                          <template #header>
+                            <h1> 嘉然Diana</h1>
+                          </template>
+                          <template #content>
+                            <p style="line-height: 20px;margin-top: 20px">
+                              所属赛区：中国赛区<br>
+                              所属企划：Asoul
+                            </p>
+                          </template>
+                        </RoleCard>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card>
+            </v-card-text>
+          </v-card>
+        </div>
       </v-window-item>
-      <v-window-item style="height: 100px" :value="2">
+      <v-window-item :value="2" style="height: 100px">
         asd
       </v-window-item>
-      <v-window-item style="height: 100px" :value="3">
+      <v-window-item :value="3" style="height: 100px">
         ggg
       </v-window-item>
     </v-window>
   </TheContainer>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .cardArea {
   display: flex;
   flex-wrap: wrap;
