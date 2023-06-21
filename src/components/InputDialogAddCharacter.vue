@@ -2,29 +2,22 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="1024">
             <template v-slot:activator="{ props }">
-                <v-btn color="secondary" v-bind="props">
+                <v-btn  class="ml-3" elevation="0" variant="outlined" v-bind="props">
                     <slot />
                 </v-btn>
             </template>
             <v-card>
                 <v-card-title>
-                    <span class="text-h5">创建新活动</span>
+                    <span class="text-h5">添加角色</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12">
-                                <v-text-field label="新活动名称*" required></v-text-field>
+                            <v-col cols="12" sm="5">
+                                <v-text-field label="角色代号*" required></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="开始时间*" required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="结束时间*" hint="必须在开始时间之后" persistent-hint
-                                    required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-file-input chips multiple label="投票封面"></v-file-input>
+                            <v-col cols="12" sm="7">
+                                <v-text-field label="角色名称" hint="不填则默认显示为代号对应的名称" persistent-hint></v-text-field>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="备注"></v-text-field>

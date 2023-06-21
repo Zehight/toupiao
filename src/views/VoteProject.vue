@@ -2,26 +2,25 @@
 import test from '@/assets/OTLIN01.png'
 
 const tab = ref(1)
+const roundTab = ref(0)
 const items = [
-  {title: '海选赛'},
-  {title: '64进32'},
-  {title: '32进16'},
-  {title: '16进8'}]
+  { title: '华语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN','ASAVA','ASDIA']},
+  { title: '日语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']},
+  { title: '彩虹赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']},
+  { title: '64进32', model: '正赛',groupMembers:4, groups: [{ title: '第一组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] }, { title: '第二组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] }] },
+  { title: '32进16', model: '正赛',groupMembers:4, groups: [{ title: '第一组', characters: ['OTLIN', 'OTTAF', 'OTMIN'] }] },
+  { title: '16进8', model: '正赛',groupMembers:2, groups: [{ title: '第一组', characters: ['OTLIN', 'OTTAF'] }] }]
 
 const cardList = [
-  {title: '中国组', role: ['111', '222', '333', '111', '222', '333']},
-  {title: '日本组', role: ['111', '222', '333', '111', '222', '333', '111', '222', '333']},
-  {title: '英语组', role: ['111', '222', '333', '111', '222', '333', '111', '222']}]
+  { title: '中国组', role: ['111', '222', '333', '111', '222', '333'] },
+  { title: '日本组', role: ['111', '222', '333', '111', '222', '333', '111', '222', '333'] },
+  { title: '英语组', role: ['111', '222', '333', '111', '222', '333', '111', '222'] }]
 </script>
 
 
 <template>
   <TheContainer>
-    <v-tabs
-      v-model="tab"
-      align-tabs="center"
-      color="deep-purple-accent-4"
-    >
+    <v-tabs v-model="tab" align-tabs="center" color="deep-purple-accent-4">
       <v-tab :value="1">第一届V萌</v-tab>
       <v-tab :value="2">第二届V萌</v-tab>
       <v-tab :value="3">第三届V萌</v-tab>
@@ -31,43 +30,101 @@ const cardList = [
     </div>
     <v-window v-model="tab">
       <v-window-item :value="1">
-        <div
-          v-for="(circleItem,index) in items" :key="index" class=" rounded border-t">
-          <div class="d-flex align-center pa-2">
-            <span class="text-h5">{{ circleItem.title }}</span>
-            <v-btn class="ml-3" elevation="0" variant="outlined">投入角色</v-btn>
+        <v-tabs v-model="roundTab" align-tabs="center" color="deep-purple-accent-4">
+          <div v-for="(roundItem, index) in items" :key="index">
+            <v-tab :value="index">{{ roundItem.title }}</v-tab>
           </div>
-          <v-card class="pa-0 ma-0 " elevation="0">
-            <v-card-actions class="justify-center">
-              <v-btn variant="tonal">推送</v-btn>
-              <v-btn variant="tonal">冻结</v-btn>
-            </v-card-actions>
-            <v-card-text class="pa-0 ma-0">
-              <v-card v-for="item in cardList" :key="item" :title="item.title" class="pa-0 ma-1"
-                      variant="tonal">
-                <v-container fluid>
-                  <v-row class="ma-0">
-                    <v-col v-for="role in item.role" :key="role" cols="12" xl="2" lg="3" md="4" sm="6">
-                      <div class="cardArea">
-                        <RoleCard :data-image="test">
-                          <template #header>
-                            <h1> 嘉然Diana</h1>
-                          </template>
-                          <template #content>
-                            <p style="line-height: 20px;margin-top: 20px">
-                              所属赛区：中国赛区<br>
-                              所属企划：Asoul
-                            </p>
-                          </template>
-                        </RoleCard>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
+        </v-tabs>
+        <v-window v-model="roundTab">
+          <div v-for="(roundItem, index) in items" :key="index" class="rounded border-t">
+            <v-window-item :value="index">
+              <div class="d-flex align-center pa-2">
+                <span class="text-h5">{{ roundItem.title }}</span>
+                <InputDialogAddCharacter v-if="roundItem.model=='海选赛'">投入角色</InputDialogAddCharacter>
+                <InputDialogAddGroup v-else :members="roundItem.groupMembers||4">添加组别</InputDialogAddGroup>
+                <v-card-actions class="justify-center">
+                  <v-btn variant="tonal">推送</v-btn>
+                  <v-btn variant="tonal">冻结</v-btn>
+                </v-card-actions>
+              </div>
+              <v-card v-if="roundItem.model=='正赛'" class="pa-0 ma-0 " elevation="0">
+                <v-card-text class="pa-0 ma-0">
+                  <v-card v-for="groupItem in roundItem.groups" :key="groupItem" :title="groupItem.title" class="pa-0 ma-1" variant="tonal">
+                    <v-container fluid>
+                      <v-row class="ma-0">
+                        <v-col v-for="chara in groupItem.characters" :key="chara" cols="12" xl="2" lg="3" md="4" sm="6">
+                          <div class="cardArea">
+                            <RoleCard :data-image="test">
+                              <template #header>
+                                <h1> 嘉然Diana</h1>
+                              </template>
+                              <template #content>
+                                <p style="line-height: 20px;margin-top: 20px">
+                                  所属赛区：中国赛区<br>
+                                  所属企划：Asoul
+                                </p>
+                              </template>
+                            </RoleCard>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-card-text>
               </v-card>
-            </v-card-text>
-          </v-card>
-        </div>
+              <v-card v-else-if="roundItem.model=='海选赛'" class="pa-0 ma-0 " elevation="0">
+                <v-card-text class="pa-0 ma-0">
+                  <v-card class="pa-0 ma-1" variant="tonal">
+                    <v-container fluid>
+                      <v-row class="ma-0">
+                        <v-col v-for="chara in roundItem.allCharacters" :key="chara" cols="12" xl="2" lg="3" md="4" sm="6">
+                          <div class="cardArea">
+                            <RoleCard :data-image="test">
+                              <template #header>
+                                <h1> 嘉然Diana</h1>
+                              </template>
+                              <template #content>
+                                <p style="line-height: 20px;margin-top: 20px">
+                                  所属赛区：中国赛区<br>
+                                  所属企划：Asoul
+                                </p>
+                              </template>
+                            </RoleCard>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-card-text>
+              </v-card>
+              <v-card v-else class="pa-0 ma-0 " elevation="0">
+                <v-card-text class="pa-0 ma-0">
+                  <v-card v-for="item in cardList" :key="item" :title="item.title" class="pa-0 ma-1" variant="tonal">
+                    <v-container fluid>
+                      <v-row class="ma-0">
+                        <v-col v-for="role in item.role" :key="role" cols="12" xl="2" lg="3" md="4" sm="6">
+                          <div class="cardArea">
+                            <RoleCard :data-image="test">
+                              <template #header>
+                                <h1> 嘉然Diana</h1>
+                              </template>
+                              <template #content>
+                                <p style="line-height: 20px;margin-top: 20px">
+                                  所属赛区：中国赛区<br>
+                                  所属企划：Asoul
+                                </p>
+                              </template>
+                            </RoleCard>
+                          </div>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card>
+                </v-card-text>
+              </v-card>
+            </v-window-item>
+          </div>
+        </v-window>
       </v-window-item>
       <v-window-item :value="2" style="height: 100px">
         asd
@@ -114,7 +171,8 @@ p {
   line-height: 1.5em;
 }
 
-h1 + p, p + p {
+h1+p,
+p+p {
   margin-top: 10px;
 }
 
@@ -141,7 +199,8 @@ h1 + p, p + p {
       opacity: 1;
     }
 
-    .card-info, .card-info p {
+    .card-info,
+    .card-info p {
       transition: 0.6s $hoverEasing;
     }
 
@@ -157,7 +216,7 @@ h1 + p, p + p {
 
     .card {
       transition: 0.6s $hoverEasing,
-      box-shadow 2s $hoverEasing;
+        box-shadow 2s $hoverEasing;
     }
   }
 }
@@ -171,8 +230,8 @@ h1 + p, p + p {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: rgba(black, 0.66) 0 3px 6px 0,
-  inset #333 0 0 0 5px,
-  inset rgba(white, 0.3) 0 0 0 6px;
+    inset #333 0 0 0 5px,
+    inset rgba(white, 0.3) 0 0 0 6px;
   transition: 1s $returnEasing;
 }
 
@@ -185,10 +244,10 @@ h1 + p, p + p {
   overflow: hidden;
   border-radius: 10px;
   box-shadow: rgba(white, 0.2) 0 3px 6px 0,
-  rgba(white, 1) 0 0 0 5px,
-  rgba(black, 0.66) 0 15px 30px 0,
-  inset #333 0 0 0 5px,
-  inset white 0 0 0 6px;
+    rgba(white, 1) 0 0 0 5px,
+    rgba(black, 0.66) 0 15px 30px 0,
+    inset #333 0 0 0 5px,
+    inset white 0 0 0 6px;
   transition: 1s $returnEasing;
 }
 
@@ -221,7 +280,7 @@ h1 + p, p + p {
   background-position: center;
   background-size: cover;
   transition: 1s $returnEasing,
-  opacity 5s 1s $returnEasing;
+    opacity 5s 1s $returnEasing;
   pointer-events: none;
 }
 
@@ -237,7 +296,7 @@ h1 + p, p + p {
   background-position: center;
   background-size: cover;
   transition: 1s $returnEasing,
-  opacity 5s 1s $returnEasing;
+    opacity 5s 1s $returnEasing;
   pointer-events: none;
 }
 
@@ -277,6 +336,4 @@ h1 + p, p + p {
     transition: 5s 1s $returnEasing;
   }
 }
-
-
 </style>

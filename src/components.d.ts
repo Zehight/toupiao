@@ -5,6 +5,8 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    InputDialogAddCharacter: typeof import('./components/InputDialogAddCharacter.vue')['default']
+    InputDialogAddGroup: typeof import('./components/InputDialogAddGroup.vue')['default']
     InputDialogCreateActivity: typeof import('./components/InputDialogCreateActivity.vue')['default']
     InputDialogCreateCharacter: typeof import('./components/InputDialogCreateCharacter.vue')['default']
     InputDialogCreateRound: typeof import('./components/InputDialogCreateRound.vue')['default']
