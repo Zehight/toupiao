@@ -27,11 +27,9 @@ function changeRouter(e: any) {
         <div class="text-h5" style="cursor: pointer;user-select: none;" @click="drawer = !drawer"> 三</div>
       </template>
       <template v-slot:append>
-        <div class="d-flex align-center">
-          <v-btn v-if="menuStore.active==='1'" class="bg-white" prepend-icon="Plus" style="margin-right: 16px">创建活动
-          </v-btn>
-          <v-btn v-if="menuStore.active==='2'" class="bg-white" prepend-icon="Plus" style="margin-right: 16px">创建角色
-          </v-btn>
+        <div class="d-flex align-center" style="margin-right: 16px">
+          <InputDialogCreateActivity v-if="menuStore.active==='1'">创建活动</InputDialogCreateActivity>
+          <InputDialogCreateCharacter v-if="menuStore.active==='2'">创建角色</InputDialogCreateCharacter>
         </div>
       </template>
     </v-app-bar>
