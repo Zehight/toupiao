@@ -27,7 +27,7 @@ const cardList = [
       <v-tab :value="3">第三届V萌</v-tab>
     </v-tabs>
     <div class="d-flex justify-center ma-3 mt-6">
-      <v-btn elevation="2" size="large">添加轮次</v-btn>
+      <InputDialogCreateRound>添加活动</InputDialogCreateRound>
     </div>
     <v-window v-model="tab">
       <v-window-item :value="1">
@@ -47,7 +47,7 @@ const cardList = [
                       variant="tonal">
                 <v-container fluid>
                   <v-row class="ma-0">
-                    <v-col v-for="role in item.role" :key="role" cols="12" lg="3" md="4" xs="6">
+                    <v-col v-for="role in item.role" :key="role" cols="12" xl="2" lg="3" md="4" sm="6">
                       <div class="cardArea">
                         <RoleCard :data-image="test">
                           <template #header>
