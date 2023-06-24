@@ -30,46 +30,54 @@ const cardList = [
       <InputDialogCreateRound>添加活动</InputDialogCreateRound>
     </div>
     <v-window v-model="tab">
-      <v-window-item :value="1">
-        <div
-          v-for="(circleItem,index) in items" :key="index" class=" rounded border-t">
-          <div class="d-flex align-center pa-2">
-            <span class="text-h5">{{ circleItem.title }}</span>
-            <v-btn class="ml-3" elevation="0" variant="outlined">投入角色</v-btn>
-          </div>
-          <v-card class="pa-0 ma-0 " elevation="0">
-            <v-card-actions class="justify-center">
-              <v-btn variant="tonal">推送</v-btn>
-              <v-btn variant="tonal">冻结</v-btn>
-            </v-card-actions>
-            <v-card-text class="pa-0 ma-0">
-              <v-card v-for="item in cardList" :key="item" :title="item.title" class="pa-0 ma-1"
-                      variant="tonal">
-                <v-container fluid>
-                  <v-row class="ma-0">
-                    <v-col v-for="role in item.role" :key="role" cols="12" xl="2" lg="3" md="4" sm="6">
-                      <div class="cardArea">
-                        <RoleCard :data-image="test">
-                          <template #header>
-                            <h1> 嘉然Diana</h1>
-                          </template>
-                          <template #content>
-                            <p style="line-height: 20px;margin-top: 20px">
-                              所属赛区：中国赛区<br>
-                              所属企划：Asoul
-                            </p>
-                          </template>
-                        </RoleCard>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card>
-            </v-card-text>
-          </v-card>
-        </div>
-      </v-window-item>
-      <v-window-item :value="2" style="height: 100px">
+          <v-window-item :value="1">
+            <v-list>
+              <v-list-item
+                v-for="(circleItem,index) in items" :key="index" class=" rounded border-t">
+                <v-list-item-title class="d-flex align-center pa-2">
+                  <span class="text-h5">{{ circleItem.title }}</span>
+                  <v-btn class="ml-3" elevation="0" variant="outlined">投入角色</v-btn>
+                </v-list-item-title>
+                <v-card elevation="0" class="pa-3 ma-3 ">
+                  <v-card-actions class="justify-center">
+                    <v-btn variant="tonal">推送</v-btn>
+                    <v-btn variant="tonal">冻结addddd</v-btn>
+                  </v-card-actions>
+                  <template v-slot:text>
+                    <v-list rounded-0>
+                      <v-list-item v-for="item in cardList" :key="item" class="pa-0">
+                        <v-card :title="item.title" variant="tonal" class=" ma-2 pa-0">
+                          <div class="d-flex flex-wrap">
+                            <v-col v-for="(role,roleIndex) in item.role" :key="role" cols="12" lg="2" md="3" sm="4" xs="6">
+                              <div class="w-100 position-relative elevation-2 rounded" style="padding-top: 150%;">
+                                <v-img cover class="position-absolute w-100 h-80 pa-2"
+                                       style="top:0;left: 0;right: 0;bottom: 10%"
+                                       v-if="roleIndex%2===1"
+                                       :src="test"></v-img>
+                                <v-img cover class="position-absolute w-100 h-80 pa-2"
+                                       style="top:0;left: 0;right: 0;bottom: 10%"
+                                       v-if="roleIndex%2===0"
+                                       :src="logo"></v-img>
+                                <text cover class="position-absolute w-100 h-80 pa-2"
+                                      style="top:90%;left: 0;right: 0;bottom: 0%"
+                                      v-if="roleIndex%2===0">{{ role }}
+                                </text>
+                                <text cover class="position-absolute w-100 h-80 pa-2"
+                                      style="top:90%;left: 0;right: 0;bottom: 0%"
+                                      v-if="roleIndex%2===1">{{ role }}
+                                </text>
+                              </div>
+                            </v-col>
+                          </div>
+                        </v-card>
+                      </v-list-item>
+                    </v-list>
+                  </template>
+                </v-card>
+              </v-list-item>
+            </v-list>
+          </v-window-item>
+      <v-window-item style="height: 100px" :value="2">
         asd
       </v-window-item>
       <v-window-item :value="3" style="height: 100px">
