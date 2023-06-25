@@ -2,7 +2,7 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="1024">
             <template v-slot:activator="{ props }">
-                <v-btn color="secondary" v-bind="props">
+                <v-btn color="pink" v-bind="props">
                     <slot />
                 </v-btn>
             </template>
