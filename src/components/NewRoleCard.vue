@@ -60,7 +60,7 @@ const aa = ref(false)
 <template>
   <div ref="card" class="card-wrap" @click="aa = !aa" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave"
     @mousemove="handleMouseMove">
-    <div :class="aa ? 'selected' : 'normol'" class="w-100 position-relative elevation-2 rounded card" :style="cardStyle"
+    <div :class="aa ? 'selected' : 'normol'" class="w-100 position-relative elevation-2 rounded-xl card" :style="cardStyle"
       style="padding-top: 133%;">
       <v-img cover :class="aa ? 'selectedBG' : 'normolBG'" class="position-absolute" aspect-ratio="320/240"
         :style="[cardBgTransform]" style="top:0;left: 0;right: 0;bottom: 10%" :src="prop.dataImage">
@@ -145,7 +145,6 @@ p+p {
   position: relative;
   background-color: #333;
   overflow: hidden;
-  border-radius: 10px;
   box-shadow: rgba(black, 0.66) 0 3px 6px 0,
     inset #333 0 0 0 5px,
     inset rgba(white, 0.3) 0 0 0 6px;
@@ -155,7 +154,6 @@ p+p {
 .selected {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
   box-shadow: rgba(white, 0.2) 0 3px 6px 0,
     rgba(white, 1) 0 0 0 5px,
     rgba(black, 0.66) 0 15px 30px 0,

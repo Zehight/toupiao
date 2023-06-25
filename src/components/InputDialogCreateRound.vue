@@ -2,7 +2,7 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="1024">
             <template v-slot:activator="{ props }">
-                <v-btn color="secondary" v-bind="props">
+                <v-btn color="pink-lighten-3" v-bind="props">
                     <slot />
                 </v-btn>
             </template>
@@ -26,7 +26,7 @@
                                 <v-text-field label="投票结束时间*" hint="必须在展示与投票开始时间之后" persistent-hint required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-select v-model="modelSelect" :items="modelItems" label="规格*" required></v-select>
+                                <v-select label="规格*" v-model="modelSelect" :items="modelItems" required></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="4" v-if="modelSelect !== '海选赛'">
                                 <v-select :items="[2, 3, 4, 5, 6]" label="每组参赛个数*"></v-select>

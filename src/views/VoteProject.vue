@@ -66,14 +66,14 @@ const items = [
       <v-tab :value="2">第二届V萌</v-tab>
       <v-tab :value="3">第三届V萌</v-tab>
     </v-tabs>
-    <div class="d-flex justify-center ma-3 mt-6">
-      <InputDialogCreateRound>添加活动</InputDialogCreateRound>
-    </div>
     <v-window v-model="tab">
       <v-window-item :value="1">
         <v-tabs v-model="roundTab" align-tabs="center" color="deep-purple-accent-4">
           <div v-for="(roundItem, index) in items" :key="index">
             <v-tab :value="index">{{ roundItem.title }}</v-tab>
+          </div>
+          <div class="d-flex justify-center ml-8 mt-4">
+            <InputDialogCreateRound>添加轮次</InputDialogCreateRound>
           </div>
         </v-tabs>
         <v-window v-model="roundTab">
@@ -96,13 +96,17 @@ const items = [
                         <div class="d-flex flex-wrap">
                           <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="chara" cols="12" lg="2" md="3"
                             sm="4" xs="6">
-                            <div class="w-100 position-relative elevation-2 rounded" style="padding-top: 150%;">
-                              <v-img cover class="position-absolute w-100 h-80 pa-2"
-                                style="top:0;left: 0;right: 0;bottom: 10%" :src="images.chara(chara)"></v-img>
-                              <text cover class="position-absolute w-100 h-80 pa-2"
-                                style="top:90%;left: 0;right: 0;bottom: 0%">{{ chara }}
-                              </text>
-                            </div>
+                            <NewRoleCard :data-image="images.chara(chara)" :data-name="names.chara(chara)">
+                              <template #header>
+                                <h1> {{ names.chara(chara) }}</h1>
+                              </template>
+                              <template #content>
+                                <p style="line-height: 20px;margin-top: 20px">
+                                  所属赛区：中国赛区<br>
+                                  所属企划：Asoul
+                                </p>
+                              </template>
+                            </NewRoleCard>
                           </v-col>
                         </div>
                       </v-card>
@@ -129,14 +133,6 @@ const items = [
                                 </p>
                               </template>
                             </NewRoleCard>
-                            <!-- <div class="w-100 position-relative elevation-2 rounded" style="padding-top: 150%;">
-                              <v-img cover class="position-absolute w-100 h-80 pa-2"
-                                style="top:0;left: 0;right: 0;bottom: 10%"
-                                :src="images.chara(chara)"></v-img>
-                              <text cover class="position-absolute w-100 h-80 pa-2"
-                                style="top:90%;left: 0;right: 0;bottom: 0%">{{ chara }}
-                              </text>
-                            </div> -->
                           </v-col>
                         </div>
                       </v-card>
@@ -159,12 +155,6 @@ const items = [
 </template>
 
 <style lang="scss" scoped>
-.cardArea {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 $hoverEasing: cubic-bezier(0.23, 1, 0.32, 1);
 $returnEasing: cubic-bezier(0.445, 0.05, 0.55, 0.95);
 

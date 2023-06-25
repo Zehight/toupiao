@@ -46,18 +46,18 @@ function changeStore([e]: any) {
 </script>
 
 <template>
-  <v-layout style="overflow: hidden">
-    <v-app-bar color="surface-variant" height="60" title="test">
+  <v-layout style="overflow: hidden" class="window">
+    <v-app-bar color="pink-lighten-4" height="60" title="test">
       <template v-slot:prepend>
         <div class="text-h5" style="cursor: pointer;user-select: none;" @click="drawer = !drawer"> 三</div>
       </template>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" color="surface" disable-resize-watcher>
+    <v-navigation-drawer v-model="drawer" disable-resize-watcher>
       <v-list @update:opened="changeRouter" @update:selected="changeStore" v-model:opened="openTabs"
         v-model:selected="selectTab" density="comfortable">
-        <v-list-group value="tabs1" color="purple">
+        <v-list-group value="tabs1">
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="primary" rounded="xl">
+            <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="indigo" rounded="sm">
               <v-list-item-title class="text-h5">全部活动</v-list-item-title>
             </v-list-item>
           </template>
@@ -65,9 +65,9 @@ function changeStore([e]: any) {
           <v-list-item v-for="([title, value], i) in activities" class="justify-center pa-2" color="blue" :key="i"
             :value="value" :title="title"></v-list-item>
         </v-list-group>
-        <v-list-group value="tabs2" color="pink">
+        <v-list-group value="tabs2">
           <template v-slot:activator="{ props }">
-            <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="primary" rounded="xl">
+            <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="indigo" rounded="sm">
               <v-list-item-title class="text-h5">全部角色</v-list-item-title>
             </v-list-item>
           </template>
@@ -84,9 +84,8 @@ function changeStore([e]: any) {
 </template>
 
 <style scoped>
-.container {
-  /*margin: auto;*/
-  /*max-width: 1536px;*/
-  /*min-width: 1200px;*/
+.window {
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
