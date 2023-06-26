@@ -27,12 +27,6 @@ const cardBgTransform = computed(() => {
   }
 })
 
-const cardBgImage = computed(() => {
-  return {
-    backgroundImage: `url(${prop.dataImage})`
-  }
-})
-
 const handleMouseMove = (e: any) => {
   mouseX.value = Math.abs(e.offsetX) - width.value / 2
   mouseY.value = Math.abs(e.offsetY) - height.value / 2

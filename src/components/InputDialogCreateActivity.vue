@@ -19,16 +19,16 @@
                                     required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="开始时间*" v-model="startTime" :rules="[rules.require, rules.number]"
+                                <v-text-field label="开始时间*" v-model="startTime" :rules="[rules.require, rules.isDate]"
                                     required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
                                 <v-text-field label="结束时间*" v-model="endTime"
-                                    :rules="[rules.require, rules.number, rules.end]" hint="必须在开始时间之后" persistent-hint
+                                    :rules="[rules.require, rules.isDate, rules.end]" hint="必须在开始时间之后" persistent-hint
                                     required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-file-input label="投票封面" chips multiple></v-file-input>
+                                <v-file-input label="投票封面" v-model="actImg" @change="uploadImg" chips multiple></v-file-input>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="备注" v-model="actRemark"></v-text-field>
@@ -52,18 +52,22 @@
 </template>
 <script lang="ts" setup>
 import { create } from '@/api/activity'
+import { upload } from '@/api/file'
+import { isString } from '@vue/shared'
 const actName = ref([]) as any | string
 const startTime = ref([]) as any | number
 const endTime = ref([]) as any | number
-const actImg = ref([]) as any | string
+const actImg = ref([]) as any | [File]
+const actImgID = ref(0)
 const actRemark = ref([]) as any | string
 const dialog = ref(false)
 const rules = {
     require: (value: any) => !!value || '该项目不能为空',
-    number: (value: any) => Number.isInteger(value) || '请填写整数',
-    end: (value: any) => !startTime.value || value > startTime.value || '必须在开始时间之后',
+    isDate: (value: any) => /[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}/.test(value) || '请填写如同“2018-12-1”的数据',
+    end: (value: any) => !startTime.value || Date.parse(value) > Date.parse(startTime.value) || '必须在开始时间之后',
 }
 const submit = async () => {
+    // uploadImg(null)
     const createForm = reactive({
         name: actName.value,
         startTime: startTime.value,
@@ -74,5 +78,10 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
+}
+const uploadImg = async (a:any) => {
+    console.log(a,actImg.value);
+    const img = await upload(actImg)
+    console.log(img);
 }
 </script>

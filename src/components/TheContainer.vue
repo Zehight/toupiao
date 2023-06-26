@@ -23,7 +23,6 @@ const zones = [
 function changeRouter(e: Array<string>) {
   if (e.length === 0) return
   let newTabs = e[e.length - 1]
-  console.log(newTabs)
   menuStore.setActive(newTabs as string)
   console.log(menuStore)
   if (newTabs === 'tabs1') {
@@ -78,7 +77,7 @@ function changeStore([e]: any) {
       </v-list>
     </v-navigation-drawer>
     <v-main class="container">
-      <slot />
+      <slot :store="menuStore"></slot>
     </v-main>
   </v-layout>
 </template>
