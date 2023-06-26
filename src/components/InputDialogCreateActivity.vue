@@ -15,17 +15,20 @@
                         <!-- <v-date-picker></v-date-picker> -->
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field label="新活动名称*" v-model="actName" required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="开始时间*" required></v-text-field>
-                            </v-col>
-                            <v-col cols="12" sm="6" md="4">
-                                <v-text-field label="结束时间*" hint="必须在开始时间之后" persistent-hint
+                                <v-text-field label="新活动名称*" v-model="actName" :rules="[rules.require]"
                                     required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-file-input chips multiple label="投票封面"></v-file-input>
+                                <v-text-field label="开始时间*" v-model="startTime" :rules="[rules.require, rules.number]"
+                                    required></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                                <v-text-field label="结束时间*" v-model="endTime"
+                                    :rules="[rules.require, rules.number, rules.end]" hint="必须在开始时间之后" persistent-hint
+                                    required></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                                <v-file-input label="投票封面" chips multiple></v-file-input>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="备注" v-model="actRemark"></v-text-field>
@@ -48,20 +51,28 @@
     </v-row>
 </template>
 <script lang="ts" setup>
-import {create} from '@/api/activity'
+import { create } from '@/api/activity'
 const actName = ref([]) as any | string
-const actImg = ref([]) as any | number
+const startTime = ref([]) as any | number
+const endTime = ref([]) as any | number
+const actImg = ref([]) as any | string
 const actRemark = ref([]) as any | string
 const dialog = ref(false)
-const createForm = reactive({
-    name: actName.toString(),
-    startTime: (new Date()).toDateString(),
-    endTime: (new Date()).toDateString(),
-    frontImg: actImg,
-    remark: actRemark.toString(),
-})
+const rules = {
+    require: (value: any) => !!value || '该项目不能为空',
+    number: (value: any) => Number.isInteger(value) || '请填写整数',
+    end: (value: any) => !startTime.value || value > startTime.value || '必须在开始时间之后',
+}
 const submit = async () => {
-  const data = await create(createForm)
-  console.log(data);
+    const createForm = reactive({
+        name: actName.value,
+        startTime: startTime.value,
+        endTime: endTime.value,
+        frontImg: actImg.value.length ? actImg.value : 123,
+        remark: actRemark.value,
+    })
+    console.log(createForm);
+    const data = await create(createForm)
+    console.log(data);
 }
 </script>
