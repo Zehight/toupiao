@@ -19,6 +19,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
 }
+
+::-webkit-scrollbar-track {
+  background: rgba(70, 40, 30, 0.15);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  cursor: pointer;
+  border-radius: 5px;
+  background: rgba(75, 90, 210, 0.45);
+  transition: color 0.2s ease;
+}
 </style>
 
 
