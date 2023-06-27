@@ -18,17 +18,27 @@
                                 <v-text-field label="新活动名称*" v-model="actName" :rules="[rules.require]"
                                     required></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="4">
+                            <v-col cols="12" sm="6" md="4" lg="3">
                                 <v-text-field label="开始时间*" v-model="startTime" :rules="[rules.require, rules.isDate]"
                                     required></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="6" md="4">
+                            <v-col cols="12" sm="6" md="4" lg="3">
                                 <v-text-field label="结束时间*" v-model="endTime"
                                     :rules="[rules.require, rules.isDate, rules.end]" hint="必须在开始时间之后" persistent-hint
                                     required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
-                                <v-file-input label="投票封面" v-model="actImg" @change="uploadImg" chips multiple></v-file-input>
+                                <v-file-input label="投票封面" v-model="actImg" @change="uploadImg" chips></v-file-input>
+                            </v-col>
+                            <v-col cols="12" sm="8" v-if="actImgID">
+                                <v-img aspect-ratio="16/9" cover max-height="25vw"
+                                    :src="previewUrl(actImgID)">
+                                    <template v-slot:placeholder>
+                                        <div class="d-flex align-center justify-center fill-height">
+                                            <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
+                                        </div>
+                                    </template>
+                                </v-img>
                             </v-col>
                             <v-col cols="12">
                                 <v-text-field label="备注" v-model="actRemark"></v-text-field>
@@ -43,7 +53,7 @@
                         关闭
                     </v-btn>
                     <v-btn color="blue-darken-1" variant="text" @click="submit">
-                        保存
+                        提交
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -52,13 +62,12 @@
 </template>
 <script lang="ts" setup>
 import { create } from '@/api/activity'
-import { upload } from '@/api/file'
-import { isString } from '@vue/shared'
+import { upload, previewUrl } from '@/api/file'
 const actName = ref([]) as any | string
 const startTime = ref([]) as any | number
 const endTime = ref([]) as any | number
 const actImg = ref([]) as any | [File]
-const actImgID = ref(0)
+const actImgID = ref('')
 const actRemark = ref([]) as any | string
 const dialog = ref(false)
 const rules = {
@@ -67,21 +76,28 @@ const rules = {
     end: (value: any) => !startTime.value || Date.parse(value) > Date.parse(startTime.value) || '必须在开始时间之后',
 }
 const submit = async () => {
-    // uploadImg(null)
     const createForm = reactive({
         name: actName.value,
         startTime: startTime.value,
         endTime: endTime.value,
-        frontImg: actImg.value.length ? actImg.value : 123,
+        frontImg: actImgID.value ? actImgID.value : '',
         remark: actRemark.value,
     })
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
 }
-const uploadImg = async (a:any) => {
-    console.log(a,actImg.value);
-    const img = await upload(actImg)
-    console.log(img);
+const uploadImg = async (e:any) => {
+    if (actImg.value[0]){
+        const imgForm = reactive({
+            file: actImg.value[0],
+        })
+        const img = await upload(imgForm)
+        actImgID.value = img.id || ''
+        console.log(img);
+    }
+    else {
+        actImgID.value = ''
+    }
 }
 </script>

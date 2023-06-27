@@ -5,7 +5,7 @@ namespace Activity {
     name: string;
     startTime: string;
     endTime: string;
-    frontImg: number;
+    frontImg: string;
     remark: string;
   }
   // 创建成功后返回的token

@@ -45,7 +45,7 @@
                         关闭
                     </v-btn>
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
-                        保存
+                        提交
                     </v-btn>
                 </v-card-actions>
             </v-card>
