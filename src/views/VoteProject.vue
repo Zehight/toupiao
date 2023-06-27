@@ -30,8 +30,36 @@ const names = {
     }
   },
 }
-const tab = ref(1)
 const roundTab = ref(0)
+
+const activitiesAndItems = {
+  v_moe: [
+    { title: '华语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN', 'OTNIG', 'ASAVA', 'ASDIA'] },
+    { title: '日语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
+    { title: '彩虹赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
+    {
+      title: '64进32', model: '正赛', groupMembers: 4, groups: [{
+        title: '第一组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }, {
+        title: '第二组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }, {
+        title: '第三组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }, {
+        title: '第四组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }]
+    },
+    {
+      title: '32进16', model: '正赛', groupMembers: 4, groups: [{
+        title: '第一组', characters: ['OTLIN', 'OTTAF', 'OTMIN']
+      }, {
+        title: '第二组', characters: ['OTLIN', 'OTMAY', 'OTNIG']
+      }]
+    },
+    {
+      title: '16进8', model: '正赛', groupMembers: 2, groups: [{ title: '第一组', characters: ['OTLIN', 'OTTAF'] }]
+    }
+  ]
+}
 const items = [
   { title: '华语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN', 'OTNIG', 'ASAVA', 'ASDIA'] },
   { title: '日语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
@@ -60,24 +88,14 @@ const items = [
 
 
 <template>
-  <TheContainer>
-    <v-tabs v-model="tab" align-tabs="center" color="deep-purple-accent-4">
-      <v-tab :value="1">第一届V萌</v-tab>
-      <v-tab :value="2">第二届V萌</v-tab>
-      <v-tab :value="3">第三届V萌</v-tab>
-    </v-tabs>
-    <v-window v-model="tab">
-      <v-window-item :value="1">
-        <v-tabs v-model="roundTab" align-tabs="center" color="deep-purple-accent-4">
-          <div v-for="(roundItem, index) in items" :key="index">
-            <v-tab :value="index">{{ roundItem.title }}</v-tab>
-          </div>
-          <div class="d-flex justify-center ml-8 mt-4">
-            <InputDialogCreateRound>添加轮次</InputDialogCreateRound>
-          </div>
-        </v-tabs>
+  <TheContainer v-slot="containerProps">
+    <v-window v-model="containerProps.store.subActive">
+      <v-window-item value="v_moe">
+        <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :items="activitiesAndItems" :sub-active="containerProps.store.subActive"/>
         <v-window v-model="roundTab">
-          <div v-for="(roundItem, index) in items" :key="index" class="rounded border-t">
+          <div
+            v-for="(roundItem, index) in activitiesAndItems[containerProps.store.subActive as keyof typeof activitiesAndItems]"
+            :key="index" class="rounded border-t">
             <v-window-item :value="index">
               <div class="d-flex align-center pa-2">
                 <span class="text-h5">{{ roundItem.title }}</span>
@@ -88,66 +106,18 @@ const items = [
                   <v-btn variant="tonal">冻结</v-btn>
                 </v-card-actions>
               </div>
-              <v-card v-if="roundItem.model == '正赛'" class="pa-0 ma-0 " elevation="0">
-                <template v-slot:text>
-                  <v-list rounded-0>
-                    <v-list-item v-for="groupItem in roundItem.groups" :key="groupItem" class="pa-0">
-                      <v-card :title="groupItem.title" variant="tonal" class=" ma-2 pa-0">
-                        <div class="d-flex flex-wrap">
-                          <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="chara" cols="12" lg="2" md="3"
-                            sm="4" xs="6">
-                            <NewRoleCard :data-image="images.chara(chara)" :data-name="names.chara(chara)">
-                              <template #header>
-                                <h1> {{ names.chara(chara) }}</h1>
-                              </template>
-                              <template #content>
-                                <p style="line-height: 20px;margin-top: 20px">
-                                  所属赛区：中国赛区<br>
-                                  所属企划：Asoul
-                                </p>
-                              </template>
-                            </NewRoleCard>
-                          </v-col>
-                        </div>
-                      </v-card>
-                    </v-list-item>
-                  </v-list>
-                </template>
-              </v-card>
-              <v-card v-else-if="roundItem.model == '海选赛'" class="pa-0 ma-0 " elevation="0">
-                <template v-slot:text>
-                  <v-list rounded-0>
-                    <v-list-item class="pa-0">
-                      <v-card title="参赛选手" variant="tonal" class=" ma-2 pa-0">
-                        <div class="d-flex flex-wrap">
-                          <v-col v-for="(chara, charaIndex) in roundItem.allCharacters" :key="chara" cols="12" xl="2"
-                            lg="2" md="3" sm="5">
-                            <NewRoleCard :data-image="images.chara(chara)" :data-name="names.chara(chara)">
-                              <template #header>
-                                <h1> {{ names.chara(chara) }}</h1>
-                              </template>
-                              <template #content>
-                                <p style="line-height: 20px;margin-top: 20px">
-                                  所属赛区：中国赛区<br>
-                                  所属企划：Asoul
-                                </p>
-                              </template>
-                            </NewRoleCard>
-                          </v-col>
-                        </div>
-                      </v-card>
-                    </v-list-item>
-                  </v-list>
-                </template>
-              </v-card>
+              <ViewRoundCards :round-item="roundItem" :images="images" :names="names"/>
             </v-window-item>
           </div>
         </v-window>
       </v-window-item>
-      <v-window-item style="height: 100px" :value="2">
+      <v-window-item style="height: 100px" value="v_moe_2">
         asd
       </v-window-item>
-      <v-window-item :value="3" style="height: 100px">
+      <v-window-item style="height: 100px" value="v_moe_5">
+        ggg
+      </v-window-item>
+      <v-window-item style="height: 100px" value="v_moe_6">
         ggg
       </v-window-item>
     </v-window>
@@ -187,6 +157,4 @@ body {
     font-size: 34px;
     line-height: 34px;
   }
-}
-
-</style>
+}</style>

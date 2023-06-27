@@ -8,12 +8,12 @@ namespace Activity {
     frontImg: number;
     remark: string;
   }
-  // 登录成功后返回的token
+  // 创建成功后返回的token
   export interface ActivityResData {
     token: string;
   }
 }
-// 用户登录
+// 活动创建
 export const create = (params: Activity.ActivityReqForm) => {
   // 返回的数据格式可以和服务端约定
   return axios.post<Activity.ActivityResData>('/project/add', params);
