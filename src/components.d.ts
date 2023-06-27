@@ -41,6 +41,7 @@ declare module '@vue/runtime-core' {
     VRow: typeof import('vuetify/components')['VRow']
     VSelect: typeof import('vuetify/components')['VSelect']
     VSpacer: typeof import('vuetify/components')['VSpacer']
+    VSwitch: typeof import('vuetify/components')['VSwitch']
     VTab: typeof import('vuetify/components')['VTab']
     VTabs: typeof import('vuetify/components')['VTabs']
     VTextField: typeof import('vuetify/components')['VTextField']

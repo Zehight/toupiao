@@ -31,7 +31,7 @@ const config = {
 class RequestHttp {
   // 定义成员变量并指定类型
   service: AxiosInstance;
-  config: AxiosRequestConfig
+  config: AxiosRequestConfig;
   public constructor(config: AxiosRequestConfig) {
     this.config = config
     // 实例化axios

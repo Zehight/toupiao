@@ -8,7 +8,7 @@ const prop = defineProps(['roundTab', 'items', 'subActive'])
     <div v-for="(roundItem, index) in items[subActive as keyof typeof items]" :key="index">
       <v-tab :value="index">{{ roundItem.title }}</v-tab>
     </div>
-    <div class="d-flex justify-center ml-8 mt-4">
+    <div class="d-flex justify-center ml-8 mt-5">
       <InputDialogCreateRound>添加轮次</InputDialogCreateRound>
     </div>
   </v-tabs>

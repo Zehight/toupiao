@@ -75,7 +75,5 @@ const projectItems = [
     { state: "其他", abbr: "OT" },
 ]
 const projectSelect = ref([]) as any | Object
-const ruleItems = ['双败:第二名进入败者组', '双败:败者组第二名被淘汰', '冒泡赛:每组第二名与另一组的第三名进行加赛', '瑞士轮:第一轮', '瑞士轮:第二轮', '瑞士轮:第三轮', 'V萌决赛:中途不进行报票', 'V萌半决赛:中途不进行报票']
-const ruleSelect = ref([]) as any | string
 const dialog = ref(false)
 </script>
