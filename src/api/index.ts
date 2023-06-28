@@ -9,6 +9,7 @@ interface Result {
 
 // 请求响应参数，包含data
 interface ResultData<T = any> extends Result {
+  id?: string;
   data?: T;
 }
 const URL: string = 'https://railway-toupiao.miragari.com'
@@ -24,13 +25,15 @@ const config = {
   // 设置超时时间
   timeout: RequestEnums.TIMEOUT as number,
   // 跨域时候允许携带凭证
-  withCredentials: true
+  withCredentials: false
 }
 
 class RequestHttp {
   // 定义成员变量并指定类型
   service: AxiosInstance;
+  config: AxiosRequestConfig;
   public constructor(config: AxiosRequestConfig) {
+    this.config = config
     // 实例化axios
     this.service = axios.create(config);
 
