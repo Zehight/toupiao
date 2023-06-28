@@ -13,13 +13,19 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" sm="5">
-                                <v-text-field label="组别序号*" required></v-text-field>
-                            </v-col>
                             <v-col cols="12" sm="7">
-                                <v-text-field label="组别名称" hint="不填则默认显示为“第X组”" persistent-hint></v-text-field>
+                                <v-text-field label="组别名称" v-model="groupName" hint="不填则默认显示为“第X组”" persistent-hint></v-text-field>
                             </v-col>
-                            <v-col cols="12">
+                            <v-col cols="12" sm="5">
+                                <v-text-field label="组内晋级人数*" v-model="promotedNum" required></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="3">
+                                <v-text-field label="组内投票人数上限*" v-model="voteNum" required></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="3">
+                                <v-text-field label="批量生成组别数量*" v-model="addNum" required></v-text-field>
+                            </v-col>
+                            <v-col cols="12" md="6">
                                 <v-text-field label="备注"></v-text-field>
                             </v-col>
                         </v-row>
@@ -31,8 +37,11 @@
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false"  :disabled="loading||disableSubmit()" :loading="loading">
                         保存
+                        <template v-slot:loader>
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </template>
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -40,5 +49,13 @@
     </v-row>
 </template>
 <script lang="ts" setup>
+const groupName = ref(undefined) as any | string
+const promotedNum = ref(undefined) as any | string
+const voteNum = ref(1)
+const addNum = ref(1)
 const dialog = ref(false)
+const loading = ref(false)
+const disableSubmit = ()=>{
+    return !groupName.value || !promotedNum.value|| !voteNum.value
+}
 </script>
