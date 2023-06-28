@@ -22,9 +22,8 @@ const zones = [
 ]
 function changeRouter(e: Array<string>) {
   if (e.length === 0) return
-  let newTabs = e[e.length - 1]
-  menuStore.setActive(newTabs as string)
-  console.log(menuStore)
+  let newTabs = e[0]
+  menuStore.setActive(newTabs)
   if (newTabs === 'tabs1') {
     router.push({ name: 'Project' })
   }
@@ -32,14 +31,19 @@ function changeRouter(e: Array<string>) {
     router.push({ name: 'Role' })
   }
 }
-function changeStore([e]: any) {
+function changeTab({value,id:newTabs}:{value:boolean,id:string}) {
+  if (value === false) return
+  if (newTabs === 'tabs1') {
+    selectTab.value = [activities[0][1]]
+    changeStore([activities[0][1]])
+  }
+  if (newTabs === 'tabs2') {
+    selectTab.value = ['NIJ']
+    changeStore([zones[0][1]])
+  }
+}
+function changeStore([e]: string[]) {
   menuStore.setSubActive(e)
-  if (/v_moe/.test(e)) {
-    router.push({ name: 'Project' })
-  }
-  if (['NIJ', 'CHI', 'JAP', 'ENG'].includes(e)) {
-    router.push({ name: 'Role' })
-  }
 }
 
 </script>
@@ -52,8 +56,8 @@ function changeStore([e]: any) {
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" disable-resize-watcher>
-      <v-list @update:opened="changeRouter" @update:selected="changeStore" v-model:opened="openTabs"
-        v-model:selected="selectTab" density="comfortable">
+      <v-list @update:opened="changeRouter" @update:selected="changeStore" @click:open="changeTab" v-model:opened="openTabs"
+        v-model:selected="selectTab" density="comfortable" open-strategy="single" mandatory>
         <v-list-group value="tabs1">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="indigo" rounded="sm">

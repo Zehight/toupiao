@@ -5,7 +5,7 @@ namespace Activity {
     name: string;
     startTime: string;
     endTime: string;
-    frontImg: number;
+    frontImg: string;
     remark: string;
   }
   // 创建成功后返回的token
@@ -17,4 +17,8 @@ namespace Activity {
 export const create = (params: Activity.ActivityReqForm) => {
   // 返回的数据格式可以和服务端约定
   return axios.post<Activity.ActivityResData>('/project/add', params);
+}
+export const getActList = () => {
+  // 返回的数据格式可以和服务端约定
+  return axios.post<Activity.ActivityResData>('/project/getList');
 }

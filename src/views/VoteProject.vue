@@ -34,9 +34,21 @@ const roundTab = ref(0)
 
 const activitiesAndItems = {
   v_moe: [
-    { title: '华语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN', 'OTNIG', 'ASAVA', 'ASDIA'] },
-    { title: '日语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
-    { title: '彩虹赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
+    {
+      title: '华语赛区海选赛', model: '海选赛', groups: [{
+        title: '参赛选手', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN', 'OTNIG', 'ASAVA', 'ASDIA']
+      }]
+    },
+    {
+      title: '日语赛区海选赛', model: '海选赛', groups: [{
+        title: '参赛选手', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }]
+    },
+    {
+      title: '彩虹赛区海选赛', model: '海选赛', groups: [{
+        title: '参赛选手', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
+      }]
+    },
     {
       title: '64进32', model: '正赛', groupMembers: 4, groups: [{
         title: '第一组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
@@ -60,30 +72,6 @@ const activitiesAndItems = {
     }
   ]
 }
-const items = [
-  { title: '华语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN', 'OTNIG', 'ASAVA', 'ASDIA'] },
-  { title: '日语赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
-  { title: '彩虹赛区海选赛', model: '海选赛', allCharacters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN'] },
-  {
-    title: '64进32', model: '正赛', groupMembers: 4, groups: [{
-      title: '第一组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
-    }, {
-      title: '第二组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
-    }, {
-      title: '第三组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
-    }, {
-      title: '第四组', characters: ['OTLIN', 'OTMAY', 'OTTAF', 'OTMIN']
-    }]
-  },
-  {
-    title: '32进16', model: '正赛', groupMembers: 4, groups: [{
-      title: '第一组', characters: ['OTLIN', 'OTTAF', 'OTMIN']
-    }, {
-      title: '第二组', characters: ['OTLIN', 'OTMAY', 'OTNIG']
-    }]
-  },
-  { title: '16进8', model: '正赛', groupMembers: 2, groups: [{ title: '第一组', characters: ['OTLIN', 'OTTAF'] }] }]
-
 </script>
 
 
@@ -91,7 +79,8 @@ const items = [
   <TheContainer v-slot="containerProps">
     <v-window v-model="containerProps.store.subActive">
       <v-window-item value="v_moe">
-        <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :items="activitiesAndItems" :sub-active="containerProps.store.subActive"/>
+        <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :items="activitiesAndItems"
+          :sub-active="containerProps.store.subActive" />
         <v-window v-model="roundTab">
           <div
             v-for="(roundItem, index) in activitiesAndItems[containerProps.store.subActive as keyof typeof activitiesAndItems]"
@@ -99,14 +88,12 @@ const items = [
             <v-window-item :value="index">
               <div class="d-flex align-center pa-2">
                 <span class="text-h5">{{ roundItem.title }}</span>
-                <InputDialogAddCharacter v-if="roundItem.model == '海选赛'">投入角色</InputDialogAddCharacter>
-                <InputDialogAddGroup v-else :members="roundItem.groupMembers || 4">添加组别</InputDialogAddGroup>
                 <v-card-actions class="justify-center">
                   <v-btn variant="tonal">推送</v-btn>
                   <v-btn variant="tonal">冻结</v-btn>
                 </v-card-actions>
               </div>
-              <ViewRoundCards :round-item="roundItem" :images="images" :names="names"/>
+              <ViewRoundCards :round-item="roundItem" :images="images" :names="names" />
             </v-window-item>
           </div>
         </v-window>
@@ -157,4 +144,5 @@ body {
     font-size: 34px;
     line-height: 34px;
   }
-}</style>
+}
+</style>

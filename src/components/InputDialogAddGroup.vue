@@ -19,9 +19,6 @@
                             <v-col cols="12" sm="7">
                                 <v-text-field label="组别名称" hint="不填则默认显示为“第X组”" persistent-hint></v-text-field>
                             </v-col>
-                            <v-col cols="12" md="6" v-for="n in members">
-                                <v-text-field :label="`${n}号角色`"></v-text-field>
-                            </v-col>
                             <v-col cols="12">
                                 <v-text-field label="备注"></v-text-field>
                             </v-col>
@@ -44,10 +41,4 @@
 </template>
 <script lang="ts" setup>
 const dialog = ref(false)
-defineProps({
-  members: {
-    type: Number,
-    required: true
-  }
-})
 </script>
