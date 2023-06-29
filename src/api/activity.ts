@@ -12,11 +12,12 @@ namespace Activity {
   export interface ActivityResData {
     token: string;
   }
+  export type ActivityList = Array<ActivityReqForm>
 }
 // 活动创建
 export const create = (params: Activity.ActivityReqForm) => {
   return axios.post<Activity.ActivityResData>('/project/add', params);
 }
 export const getActList = () => {
-  return axios.post<Activity.ActivityResData>('/project/getList');
+  return axios.post<Activity.ActivityList>('/project/getList');
 }

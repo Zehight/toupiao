@@ -17,7 +17,7 @@
                                 <v-text-field label="新角色名称*" v-model="roleName" required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="9" md="5">
-                                <v-text-field label="新角色外文名称*" v-model="roleOriginalName" hint="没有则不填"></v-text-field>
+                                <v-text-field label="新角色外文名称" v-model="roleOriginalName" hint="没有则不填"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="3" md="2">
                                 <v-text-field label="名称简写*" v-model="roleAbbr" hint="由三个大写字母组成" required></v-text-field>

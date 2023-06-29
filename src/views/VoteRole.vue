@@ -1,4 +1,37 @@
 <script lang="ts" setup>
+import { getRoleList, getRoleInfo } from '@/api/role'
+import { fileUrl } from '@/api/file'
+interface roleData {
+  id: string
+  name: string
+  originalName?: string
+  code: string
+  zone: string
+  official: string
+  frontImgs: string[]
+}
+const roleList = ref([]) as any
+const roleStore = reactive({}) as Record<string, roleData>
+const initedList = ref(false)
+const updateRoleList = async () => {
+  const list = await getRoleList() as any
+  roleList.value = list.list.filter((v: any) => v.code.replace(" ", ""))
+  for (let v of roleList.value) {
+    getStoreRoleInfo(v.id)
+  }
+  initedList.value = true
+}
+const getStoreRoleInfo = async (id: string) => {
+  const info = await getRoleInfo(id) as any
+  const data = info.data as roleData
+  if (!data.code || !data.frontImgs.length) return
+  if (!roleStore[data.code]) {
+    roleStore[data.code] = data
+  }
+  console.log(data, roleStore)
+  return roleStore[data.code]
+}
+updateRoleList()
 interface chara {
   code: Uppercase<string>;
   zone: Uppercase<string>;
@@ -8,49 +41,6 @@ interface chara {
   imageIDs: {}[];
   history: {};
   remark?: string;
-}
-class Official {
-  id: Uppercase<string>;
-  name: string;
-  originalName?: string;
-  public constructor(id: Uppercase<string>, name: string, originalName?: string) {
-    this.id = id
-    this.name = name
-    originalName && (this.originalName = originalName)
-  }
-}
-const officials: Official[] = [
-  new Official('NJ','彩虹社（JP）'),
-	new Official('NE','彩虹社（EN）'),
-	new Official('VT','VTA虚拟艺人学院'),
-	new Official('VR','VirtuaReal'),
-	new Official('AS','A-SOUL'),
-	new Official('CH','Chaoslive'),
-	new Official('NE','网易'),
-	new Official('PW','完美世界'),
-	new Official('SI','四禧丸子'),
-	new Official('TE','Tencent'),
-	new Official('XY','虚研社'),
-	new Official('AM','Amalis'),
-	new Official('HI','Hololive（ID）'),
-	new Official('HJ','花寄女子寮'),
-	new Official('HO','Hololive'),
-	new Official('HX','Hololive（HoloX）'),
-	new Official('PR','帕里坡'),
-	new Official('VW','V.W.P.'),
-	new Official('HE','Hololive（EN）'),
-	new Official('VS','Vshojo'),
-	new Official('YS','Yostar'),
-	new Official('OT','others'),
-]
-class Character {
-  // 定义成员变量并指定类型
-  remark
-  public constructor(remark: string) {
-    this.remark = remark
-  }
-  handleCode(code: number): void {
-  }
 }
 const characters: chara[] = [
   {
@@ -83,14 +73,28 @@ const characters: chara[] = [
 <template>
   <TheContainer>
     <h1>全部角色</h1>
+    <v-window>
+      <v-btn color="blue-darken-1" variant="text" @click="updateRoleList">
+        测试
+      </v-btn>
+    </v-window>
+    <v-card variant="tonal" class="ma-0 pa-0" cols="12">
+      <template v-slot:title>
+        <v-list v-if="initedList" class="d-flex flex-wrap" rounded-0>
+          <v-list-item v-for="(chara, charaIndex) in roleStore" :key="charaIndex">
+            <v-card v-if="chara.frontImgs.length" variant="tonal" class=" ma-0 pa-0" height="26.5vw" width="20vw">
+              <RoleInfoCard :roleInfo="chara"></RoleInfoCard>
+            </v-card>
+          </v-list-item>
+        </v-list>
+      </template>
+    </v-card>
   </TheContainer>
 </template>
 
 
 
-<style scoped>
-
-</style>
+<style scoped></style>
 
 
 

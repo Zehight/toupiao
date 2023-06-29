@@ -13,17 +13,24 @@ namespace Role {
   export interface RoleResData {
     token: string;
   }
+  export interface RoleListData {
+    list: Array<RoleReqForm>;
+  }
+  export type RoleImgList = Array<string>
 }
 // 角色上传
 export const create = (params: Role.RoleReqForm) => {
   return axios.post<Role.RoleResData>('/role/add', params);
 }
-export const getActList = () => {
-  return axios.post<Role.RoleResData>('/role/getList');
+export const getRoleList = () => {
+  return axios.post<Role.RoleListData>('/role/getList');
 }
-export const addRoleImg = (roleID: string, imgID: string) => {
-  return axios.post<Role.RoleResData>('/roleFrontImg/add', { roleID, fileID: imgID });
+export const getRoleInfo = (id: string) => {
+  return axios.post<Role.RoleReqForm>('/role/getInfo',{id});
 }
-export const getListRoleImg = (roleID: string) => {
-  return axios.post<Role.RoleResData>('/roleFrontImg/getList', { roleID });
+export const addRoleImg = (roleId: string, imgId: string) => {
+  return axios.post<Role.RoleResData>('/roleFrontImg/add', { roleId, fileId: imgId });
+}
+export const getRoleImgList = (roleId: string) => {
+  return axios.post<Role.RoleImgList>('/roleFrontImg/getList', { roleId });
 }
