@@ -15,12 +15,11 @@ axios.service.interceptors.request.use((res:any) => {
 });
 // 文件上传
 export const upload = (params: File.FileReqForm) => {
-  // 返回的数据格式可以和服务端约定
   const formData = new FormData()
   formData.append('file',params.file)
   return axios.post<File.FileResData>('/file/add', formData);
 }
 // 文件上传（直接获取Url）
-export const previewUrl = (id: string):string => {
+export const fileUrl = (id: string):string => {
   return `${axios.config.baseURL}/file/preview/${id}`;
 }

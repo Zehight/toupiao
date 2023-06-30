@@ -7,15 +7,15 @@ const prop = defineProps(['roundItem', 'images', 'names'])
   <v-card class="pa-0 ma-0 " elevation="0">
     <template v-slot:text>
       <v-list rounded-0>
-        <v-list-item v-for="groupItem in roundItem.groups" :key="groupItem" class="mt-2">
+        <v-list-item v-for="(groupItem, groupIndex) in roundItem.groups" :key="groupIndex" class="mt-2">
           <v-card variant="tonal" class=" ma-0 pa-0">
             <template v-slot:title>
               <div class="d-flex">{{groupItem.title}}<InputDialogAddCharacter>投入角色</InputDialogAddCharacter></div>
             </template>
             <div class="d-flex flex-wrap">
-              <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="chara" cols="12" lg="2" md="3" sm="4"
+              <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="charaIndex" cols="12" lg="2" md="3" sm="4"
                 xs="6">
-                <NewRoleCard :data-image="images.chara(chara)" :data-name="names.chara(chara)">
+                <NewRoleCard :data-image="images.chara(chara)">
                   <template #header>
                     <h1> {{ names.chara(chara) }}</h1>
                   </template>

@@ -13,27 +13,46 @@
                 <v-card-text>
                     <v-container>
                         <v-row>
-                            <v-col cols="12" sm="9">
-                                <v-text-field label="新角色名称*" required></v-text-field>
+                            <v-col cols="12" sm="9" md="5">
+                                <v-text-field label="新角色名称*" v-model="roleName" required></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="3">
-                                <v-text-field label="名称简写*" hint="由三个大写字母组成" required></v-text-field>
+                            <v-col cols="12" sm="9" md="5">
+                                <v-text-field label="新角色外文名称" v-model="roleOriginalName" hint="没有则不填"></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="3" md="2">
+                                <v-text-field label="名称简写*" v-model="roleAbbr" hint="由三个大写字母组成" required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-select v-model="zoneSelect" :items="zoneItems" item-title="state" item-value="abbr"
-                                    label="所属赛区*" :hint="`${zoneSelect.abbr ? zoneSelect.state + ',' + zoneSelect.abbr : ''}`"
+                                    label="所属赛区*"
+                                    :hint="`${zoneSelect.abbr ? zoneSelect.state + ',' + zoneSelect.abbr : ''}`"
                                     persistent-hint return-object required></v-select>
                             </v-col>
                             <v-col cols="12" sm="6">
-                                <v-select v-model="projectSelect" :items="projectItems" item-title="state" item-value="abbr"
-                                    label="所属企划*" :hint="`${projectSelect.abbr ? projectSelect.state + ',' + projectSelect.abbr : ''}`"
+                                <v-select v-model="officialSelect" :items="officialItems" item-title="state"
+                                    item-value="abbr" label="所属企划*"
+                                    :hint="`${officialSelect.abbr ? officialSelect.state + ',' + officialSelect.abbr : ''}`"
                                     persistent-hint return-object required></v-select>
                             </v-col>
-                            <v-col cols="12" sm="7">
+                            <v-col cols="12" sm="8">
                                 <v-text-field label="备注"></v-text-field>
                             </v-col>
-                            <v-col cols="12" sm="5">
-                                <v-file-input chips multiple label="角色封面"></v-file-input>
+                            <v-col cols="12" sm="4">
+                                <v-file-input label="角色封面" v-model="roleImg" @change="uploadImg" chips></v-file-input>
+                            </v-col>
+                            <v-col cols="12" sm="8" v-if="roleImgID" class="d-flex">
+                                <div v-for="imgID in [roleImgID]" class="w-50 position-relative rounded-xl ml-3"
+                                    style="padding-top: 75%;">
+                                    <v-img cover class="position-absolute" aspect-ratio="320/240"
+                                        style="top:0;left: 0;right: 0;bottom: 10%" :src="fileUrl(imgID)">
+                                        <template v-slot:placeholder>
+                                            <div class="d-flex align-center justify-center fill-height">
+                                                <v-progress-circular color="grey-lighten-4"
+                                                    indeterminate></v-progress-circular>
+                                            </div>
+                                        </template>
+                                    </v-img>
+                                </div>
                             </v-col>
                         </v-row>
                     </v-container>
@@ -44,8 +63,11 @@
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                    <v-btn color="blue-darken-1" variant="text" @click="submit" :disabled="loading||disableSubmit()" :loading="loading">
                         提交
+                        <template v-slot:loader>
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </template>
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -53,6 +75,8 @@
     </v-row>
 </template>
 <script lang="ts" setup>
+import { create } from '@/api/role'
+import { upload, fileUrl } from '@/api/file'
 const zoneItems = [
     { state: "彩虹赛区", abbr: "NIJ" },
     { state: "华语赛区", abbr: "CHI" },
@@ -61,9 +85,9 @@ const zoneItems = [
     { state: "大物赛区", abbr: "BIG" },
 ]
 const zoneSelect = ref([]) as any | Object
-const projectItems = [
+const officialItems = [
     { state: "彩虹社(本社)", abbr: "NJ" },
-    { state: "彩虹社(EN)", abbr: "NE" },
+    { state: "彩虹社(EN)", abbr: "NE", parent: "NJ" },
     { state: "VirtuaReal", abbr: "VR" },
     { state: "A-SOUL", abbr: "AS" },
     { state: "完美世界", abbr: "PW" },
@@ -74,6 +98,46 @@ const projectItems = [
     { state: "帕里坡", abbr: "PR" },
     { state: "其他", abbr: "OT" },
 ]
-const projectSelect = ref([]) as any | Object
+const officialSelect = ref([]) as any | Object
+const roleName = ref(undefined) as any | string
+const roleOriginalName = ref(undefined) as any | string
+const roleAbbr = ref(undefined) as any | string
+const roleImg = ref(undefined) as any | [File?]
+const roleImgID = ref('')
 const dialog = ref(false)
+const loading = ref(false)
+const disableSubmit = ()=>{
+    return !roleName.value || !roleAbbr.value
+}
+const submit = async () => {
+    loading.value = true
+    const createForm = reactive({
+        code: officialSelect.value.abbr + roleAbbr.value,
+        name: roleName.value,
+        originalName: roleOriginalName.value || undefined,
+        frontImg: roleImgID.value,
+        official: officialSelect.value.abbr,
+        parentOfficial: officialSelect.value.parent,
+        zone: zoneSelect.value.abbr,
+    })
+    console.log(createForm);
+    const data = await create(createForm)
+    console.log(data);
+    setTimeout(() => (loading.value = false), 500)
+}
+const uploadImg = async (e: any) => {
+    if (roleImg.value[0]) {
+        loading.value = true
+        const imgForm = reactive({
+            file: roleImg.value[0],
+        })
+        const img = await upload(imgForm)
+        roleImgID.value = img.id || ''
+        console.log(img);
+        setTimeout(() => (loading.value = false), 500)
+    }
+    else {
+        roleImgID.value = ''
+    }
+}
 </script>
