@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const prop = defineProps(['dataImage', 'dataName'])
+const prop = defineProps(['dataImage'])
 
 const card: any = ref(null)
 const width = ref(0)

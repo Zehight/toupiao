@@ -44,6 +44,9 @@ function changeTab({value,id:newTabs}:{value:boolean,id:string}) {
 }
 function changeStore([e]: string[]) {
   menuStore.setSubActive(e)
+  if (/v_moe/.test(e)) {
+    router.push({ name: 'Project' })
+  }
 }
 
 </script>

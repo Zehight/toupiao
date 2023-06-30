@@ -31,16 +31,13 @@
                                 <v-file-input label="投票封面" v-model="actImg" @change="uploadImg" chips></v-file-input>
                             </v-col>
                             <v-col cols="12" sm="8" v-if="actImgID">
-                                <v-img aspect-ratio="16/9" cover max-height="25vw" :src="previewUrl(actImgID)">
+                                <v-img aspect-ratio="16/9" cover max-height="25vw" :src="fileUrl(actImgID)">
                                     <template v-slot:placeholder>
                                         <div class="d-flex align-center justify-center fill-height">
                                             <v-progress-circular color="grey-lighten-4" indeterminate></v-progress-circular>
                                         </div>
                                     </template>
                                 </v-img>
-                            </v-col>
-                            <v-col cols="12" md="5">
-                                <v-switch label="创建完成后自动生成空组别" v-model="emptyGroup"></v-switch>
                             </v-col>
                             <v-col cols="12" md="7">
                                 <v-text-field label="备注" v-model="actRemark"></v-text-field>
@@ -57,8 +54,11 @@
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="submit">
+                    <v-btn color="blue-darken-1" variant="text" @click="submit" :disabled="loading||disableSubmit()" :loading="loading">
                         提交
+                        <template v-slot:loader>
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </template>
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -67,21 +67,25 @@
 </template>
 <script lang="ts" setup>
 import { create, getActList } from '@/api/activity'
-import { upload, previewUrl } from '@/api/file'
-const actName = ref([]) as any | string
-const startTime = ref([]) as any | number
-const endTime = ref([]) as any | number
-const actImg = ref([]) as any | [File?]
+import { upload, fileUrl } from '@/api/file'
+const actName = ref(undefined) as any | string
+const startTime = ref(undefined) as any | string
+const endTime = ref(undefined) as any | string
+const actImg = ref(undefined) as any | [File?]
 const actImgID = ref('')
-const actRemark = ref([]) as any | string
+const actRemark = ref(undefined) as any | string
 const dialog = ref(false)
-const emptyGroup = ref(true)
+const loading = ref(false)
 const rules = {
     require: (value: any) => !!value || '该项目不能为空',
     isDate: (value: any) => /[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}/.test(value) || '请填写如同“2018-12-1”的数据',
     end: (value: any) => !startTime.value || Date.parse(value) > Date.parse(startTime.value) || '必须在开始时间之后',
 }
+const disableSubmit = ()=>{
+    return !actName.value || !startTime.value || !endTime.value
+}
 const submit = async () => {
+    loading.value = true
     const createForm = reactive({
         name: actName.value,
         startTime: startTime.value,
@@ -92,6 +96,7 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
+    setTimeout(() => (loading.value = false), 500)
 }
 const test = async () => {
     const data = await getActList()
@@ -99,12 +104,14 @@ const test = async () => {
 }
 const uploadImg = async (e: any) => {
     if (actImg.value[0]) {
+        loading.value = true
         const imgForm = reactive({
             file: actImg.value[0],
         })
         const img = await upload(imgForm)
         actImgID.value = img.id || ''
         console.log(img);
+        setTimeout(() => (loading.value = false), 500)
     }
     else {
         actImgID.value = ''
