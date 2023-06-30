@@ -13,8 +13,7 @@ const prop = defineProps(['roundItem', 'images', 'names'])
               <div class="d-flex">{{groupItem.title}}<InputDialogAddCharacter>投入角色</InputDialogAddCharacter></div>
             </template>
             <div class="d-flex flex-wrap">
-              <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="charaIndex" cols="12" lg="2" md="3" sm="4"
-                xs="6">
+              <v-col v-for="(chara, charaIndex) in groupItem.characters" :key="charaIndex" cols="12" lg="2" md="3" sm="4">
                 <NewRoleCard :data-image="images.chara(chara)">
                   <template #header>
                     <h1> {{ names.chara(chara) }}</h1>

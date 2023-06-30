@@ -5,6 +5,7 @@ export const useMenu = defineStore('menu', {
   state: () => ({
     active: 'tabs1',
     subActive: 'v_moe_6',
+    projects: {},
     openeds: [] as string[],
     // roleMenus: menuList
   }),

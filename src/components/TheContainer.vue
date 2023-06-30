@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 import { useMenu } from '@/modules/store'
+import { getActList, getActInfo } from '@/api/activity'
+import { zones } from '@/data/zone'
 
 const router = useRouter()
 const menuStore = useMenu()
@@ -14,12 +16,25 @@ const activities = [
   ['V萌V', 'v_moe_5'],
   ['V萌6', 'v_moe_6'],
 ]
-const zones = [
-  ['彩虹赛区', 'NIJ'],
-  ['华语赛区', 'CHI'],
-  ['日语赛区', 'JAP'],
-  ['英语赛区', 'ENG'],
-]
+interface projectData {
+  id: string
+  name: string
+  model: string
+  createTime: string
+  endTime: string
+  frontImgs: string[]
+  remark?: string
+}
+const projectStore = reactive({}) as {data?:Record<string, projectData>}
+const initedProjectList = ref(false)
+const updateActList = async () => {
+  const data = await getActList() as any
+  menuStore.projects = data.list
+  projectStore.data = menuStore.projects
+console.log(menuStore.projects,projectStore)
+  initedProjectList.value = true
+}
+updateActList()
 function changeRouter(e: Array<string>) {
   if (e.length === 0) return
   let newTabs = e[0]
@@ -39,7 +54,7 @@ function changeTab({value,id:newTabs}:{value:boolean,id:string}) {
   }
   if (newTabs === 'tabs2') {
     selectTab.value = ['NIJ']
-    changeStore([zones[0][1]])
+    changeStore([zones.NIJ.abbr])
   }
 }
 function changeStore([e]: string[]) {
@@ -68,8 +83,8 @@ function changeStore([e]: string[]) {
             </v-list-item>
           </template>
           <InputDialogCreateActivity class="mt-0 mb-3">创建活动</InputDialogCreateActivity>
-          <v-list-item v-for="([title, value], i) in activities" class="justify-center pa-2" color="blue" :key="i"
-            :value="value" :title="title"></v-list-item>
+          <v-list-item v-for="({id,name}, value, i) in projectStore.data" class="justify-center pa-2" color="blue" :key="i"
+            :value="id" :title="name"></v-list-item>
         </v-list-group>
         <v-list-group value="tabs2">
           <template v-slot:activator="{ props }">
@@ -78,8 +93,8 @@ function changeStore([e]: string[]) {
             </v-list-item>
           </template>
           <InputDialogCreateCharacter class="mt-0 mb-3">创建角色</InputDialogCreateCharacter>
-          <v-list-item v-for="([title, value], i) in zones" class="justify-center pa-2" color="blue" :key="i"
-            :value="value" :title="title"></v-list-item>
+          <v-list-item v-for="({name,abbr}, value, i) in zones" class="justify-center pa-2" color="blue" :key="i"
+            :value="abbr" :title="name"></v-list-item>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>

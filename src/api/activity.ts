@@ -18,6 +18,12 @@ namespace Activity {
 export const create = (params: Activity.ActivityReqForm) => {
   return axios.post<Activity.ActivityResData>('/project/add', params);
 }
+export const delAct = (id:string) => {
+  return axios.post<Activity.ActivityResData>('/project/delInfo', {id});
+}
 export const getActList = () => {
   return axios.post<Activity.ActivityList>('/project/getList');
+}
+export const getActInfo = (id: string) => {
+  return axios.post<Activity.ActivityReqForm>('/role/getInfo',{id});
 }

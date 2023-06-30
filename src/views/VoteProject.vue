@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import test from '@/assets/OTLIN01.png'
 import OTLIN from '@/assets/chara/OTLIN01.png'
 import OTMAY from '@/assets/chara/OTMAY01.png'
 import OTMIN from '@/assets/chara/OTMIN01.png'
 import OTNIG from '@/assets/chara/OTNIG01.png'
 import OTTAF from '@/assets/chara/OTTAF01.png'
+import { getActList, getActInfo } from '@/api/activity'
 
 const images = {
   charas: { OTLIN, OTMAY, OTMIN, OTNIG, OTTAF } as any,
-  chara: (id: string) => images.charas[id] ? images.charas[id] : test,
+  chara: (id: string) => images.charas[id] ? images.charas[id] : OTLIN,
 }
 const names = {
   noname: '未录入名称',
@@ -72,12 +72,25 @@ const activitiesAndItems = {
     }
   ]
 }
+
+
+const updateActList = async () => {
+    const data = await getActList()
+    console.log(data);
+}
+const test = async (id:string) => {
+    const data = await getActInfo(id)
+    console.log(data);
+}
 </script>
 
 
 <template>
   <TheContainer v-slot="containerProps">
     <v-window v-model="containerProps.store.subActive">
+      <v-btn color="blue-darken-1" variant="text" @click="updateActList">
+        刷新
+      </v-btn>
       <v-window-item value="v_moe">
         <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :items="activitiesAndItems"
           :sub-active="containerProps.store.subActive" />
@@ -129,10 +142,15 @@ body {
   padding: 1vw;
   font-weight: 700;
   text-shadow: rgba(black, 1) -3px 0px 10px;
-
-  @media screen and (max-width: 1024px) {
+  
+  @media screen and (max-width: 640px) {
     font-size: 28px;
     line-height: 28px;
+  }
+
+  @media screen and (min-width: 640px) and (max-width: 1024px) {
+    font-size: 30px;
+    line-height: 30px;
   }
 
   @media screen and (min-width: 1024px) and (max-width: 1440px) {
