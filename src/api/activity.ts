@@ -25,5 +25,5 @@ export const getActList = () => {
   return axios.post<Activity.ActivityList>('/project/getList');
 }
 export const getActInfo = (id: string) => {
-  return axios.post<Activity.ActivityReqForm>('/role/getInfo',{id});
+  return axios.post<Activity.ActivityReqForm>('/project/getInfo',{id});
 }

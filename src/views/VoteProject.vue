@@ -4,7 +4,6 @@ import OTMAY from '@/assets/chara/OTMAY01.png'
 import OTMIN from '@/assets/chara/OTMIN01.png'
 import OTNIG from '@/assets/chara/OTNIG01.png'
 import OTTAF from '@/assets/chara/OTTAF01.png'
-import { getActList, getActInfo } from '@/api/activity'
 
 const images = {
   charas: { OTLIN, OTMAY, OTMIN, OTNIG, OTTAF } as any,
@@ -30,8 +29,8 @@ const names = {
     }
   },
 }
-const roundTab = ref(0)
-
+// const roundTab = ref(0)
+const roundTab = reactive({})
 const activitiesAndItems = {
   v_moe: [
     {
@@ -72,26 +71,13 @@ const activitiesAndItems = {
     }
   ]
 }
-
-
-const updateActList = async () => {
-    const data = await getActList()
-    console.log(data);
-}
-const test = async (id:string) => {
-    const data = await getActInfo(id)
-    console.log(data);
-}
 </script>
 
 
 <template>
   <TheContainer v-slot="containerProps">
-    <v-window v-model="containerProps.store.subActive">
-      <v-btn color="blue-darken-1" variant="text" @click="updateActList">
-        刷新
-      </v-btn>
-      <v-window-item value="v_moe">
+    <v-window v-if="containerProps.store.projects&&containerProps.store.projects[containerProps.store.subActive]" v-model="containerProps.store.subActive">
+      <!-- <v-window-item value="v_moe">
         <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :items="activitiesAndItems"
           :sub-active="containerProps.store.subActive" />
         <v-window v-model="roundTab">
@@ -110,17 +96,13 @@ const test = async (id:string) => {
             </v-window-item>
           </div>
         </v-window>
-      </v-window-item>
-      <v-window-item style="height: 100px" value="v_moe_2">
+      </v-window-item> -->
+      <v-window-item v-for="(items,value,i) in containerProps.store.projects" style="height: 100px" :value="value">
+        <ViewRoundTabs v-model="roundTab" :round-tab="roundTab" :project-id="items.id"/>
         asd
       </v-window-item>
-      <v-window-item style="height: 100px" value="v_moe_5">
-        ggg
-      </v-window-item>
-      <v-window-item style="height: 100px" value="v_moe_6">
-        ggg
-      </v-window-item>
     </v-window>
+    <div v-else><h1>加载中</h1></div>
   </TheContainer>
 </template>
 

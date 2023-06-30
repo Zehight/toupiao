@@ -3,9 +3,9 @@ import { defineStore } from 'pinia'
 
 export const useMenu = defineStore('menu', {
   state: () => ({
-    active: 'tabs1',
-    subActive: 'v_moe_6',
-    projects: {},
+    active: 'tabs2',
+    subActive: 'CHI',
+    projects:<Record<string,any>>{},
     openeds: [] as string[],
     // roleMenus: menuList
   }),

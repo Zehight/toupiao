@@ -25,16 +25,15 @@ interface projectData {
   frontImgs: string[]
   remark?: string
 }
-const projectStore = reactive({}) as {data?:Record<string, projectData>}
 const initedProjectList = ref(false)
 const updateActList = async () => {
   const data = await getActList() as any
-  menuStore.projects = data.list
-  projectStore.data = menuStore.projects
-console.log(menuStore.projects,projectStore)
+  for(let i of data.list as projectData[]){
+    menuStore.projects[i.id] = i
+  }
+  console.log(menuStore.projects)
   initedProjectList.value = true
 }
-updateActList()
 function changeRouter(e: Array<string>) {
   if (e.length === 0) return
   let newTabs = e[0]
@@ -46,7 +45,7 @@ function changeRouter(e: Array<string>) {
     router.push({ name: 'Role' })
   }
 }
-function changeTab({value,id:newTabs}:{value:boolean,id:string}) {
+function changeTab({ value, id: newTabs }: { value: boolean, id: string }) {
   if (value === false) return
   if (newTabs === 'tabs1') {
     selectTab.value = [activities[0][1]]
@@ -63,7 +62,7 @@ function changeStore([e]: string[]) {
     router.push({ name: 'Project' })
   }
 }
-
+updateActList()
 </script>
 
 <template>
@@ -74,8 +73,8 @@ function changeStore([e]: string[]) {
       </template>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" disable-resize-watcher>
-      <v-list @update:opened="changeRouter" @update:selected="changeStore" @click:open="changeTab" v-model:opened="openTabs"
-        v-model:selected="selectTab" density="comfortable" open-strategy="single" mandatory>
+      <v-list @update:opened="changeRouter" @update:selected="changeStore" @click:open="changeTab"
+        v-model:opened="openTabs" v-model:selected="selectTab" density="comfortable" open-strategy="single" mandatory>
         <v-list-group value="tabs1">
           <template v-slot:activator="{ props }">
             <v-list-item v-bind="props" class="justify-center pa-2" height="80" color="indigo" rounded="sm">
@@ -83,8 +82,8 @@ function changeStore([e]: string[]) {
             </v-list-item>
           </template>
           <InputDialogCreateActivity class="mt-0 mb-3">创建活动</InputDialogCreateActivity>
-          <v-list-item v-for="({id,name}, value, i) in projectStore.data" class="justify-center pa-2" color="blue" :key="i"
-            :value="id" :title="name"></v-list-item>
+          <v-list-item v-for="({ id, name }, value, i) in menuStore.projects" class="justify-center pa-2" color="blue"
+            :key="i" :value="id" :title="name"></v-list-item>
         </v-list-group>
         <v-list-group value="tabs2">
           <template v-slot:activator="{ props }">
@@ -93,13 +92,13 @@ function changeStore([e]: string[]) {
             </v-list-item>
           </template>
           <InputDialogCreateCharacter class="mt-0 mb-3">创建角色</InputDialogCreateCharacter>
-          <v-list-item v-for="({name,abbr}, value, i) in zones" class="justify-center pa-2" color="blue" :key="i"
+          <v-list-item v-for="({ name, abbr }, value, i) in zones" class="justify-center pa-2" color="blue" :key="i"
             :value="abbr" :title="name"></v-list-item>
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <v-main class="container">
-      <slot :store="menuStore"></slot>
+      <slot v-if="initedProjectList" :store="menuStore"></slot>
     </v-main>
   </v-layout>
 </template>
