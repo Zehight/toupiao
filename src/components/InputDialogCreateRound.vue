@@ -43,6 +43,9 @@
                                     </template>
                                 </v-img>
                             </v-col>
+                            <v-col cols="12" md="7">
+                                <v-text-field label="备注" v-model="roundRemark"></v-text-field>
+                            </v-col>
                         </v-row>
                     </v-container>
                     <small>*表示必填项目</small>
@@ -75,7 +78,7 @@ const startVoteTime = ref(undefined) as any | string
 const endVoteTime = ref(undefined) as any | string
 const roundImg = ref(undefined) as any | [File?]
 const roundImgID = ref('')
-const actRemark = ref(undefined) as any | string
+const roundRemark = ref(undefined) as any | string
 const dialog = ref(false)
 const emptyGroup = ref(true)
 const loading = ref(false)
@@ -91,7 +94,7 @@ const submit = async () => {
         startVoteTime: startVoteTime.value,
         endVoteTime: endVoteTime.value,
         frontImg: roundImgID.value ? roundImgID.value : '',
-        remark: actRemark.value,
+        remark: roundRemark.value,
     })
     console.log(createForm);
     const data = await create(createForm)

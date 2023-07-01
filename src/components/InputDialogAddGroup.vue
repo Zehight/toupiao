@@ -25,9 +25,6 @@
                             <v-col cols="12" sm="6" md="3">
                                 <v-text-field label="批量生成组别数量*" v-model="addNum" required></v-text-field>
                             </v-col>
-                            <v-col cols="12" md="6">
-                                <v-text-field label="备注"></v-text-field>
-                            </v-col>
                         </v-row>
                     </v-container>
                     <small>*表示必填项目</small>
@@ -37,7 +34,7 @@
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="dialog = false"  :disabled="loading||disableSubmit()" :loading="loading">
+                    <v-btn color="blue-darken-1" variant="text" @click="submit"  :disabled="loading||disableSubmit()" :loading="loading">
                         保存
                         <template v-slot:loader>
                             <v-progress-linear indeterminate></v-progress-linear>
@@ -49,13 +46,28 @@
     </v-row>
 </template>
 <script lang="ts" setup>
+import { add } from '@/api/group'
+const prop = defineProps(['roundId'])
 const groupName = ref(undefined) as any | string
 const promotedNum = ref(undefined) as any | string
-const voteNum = ref(1)
+const voteNum = ref('1')
 const addNum = ref(1)
 const dialog = ref(false)
 const loading = ref(false)
 const disableSubmit = ()=>{
     return !groupName.value || !promotedNum.value|| !voteNum.value
+}
+const submit = async () => {
+    loading.value = true
+    const createForm = reactive({
+        name: groupName.value,
+        roundId: prop.roundId,
+        promotedNum: promotedNum.value,
+        voteNum: voteNum.value,
+    })
+    console.log(createForm,addNum);
+    const data = await add(createForm)
+    console.log(data);
+    setTimeout(() => (loading.value = false), 500)
 }
 </script>

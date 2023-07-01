@@ -3,6 +3,7 @@ namespace Round {
   // 活动创建表单
   export interface RoundReqForm {
     name: string;
+    projectId: string;
     showTime: string;
     startVoteTime: string;
     endVoteTime: string;
