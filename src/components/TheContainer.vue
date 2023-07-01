@@ -10,12 +10,7 @@ const menuStore = useMenu()
 const drawer = ref(true)
 const openTabs = ref([menuStore.active])
 const selectTab = ref([menuStore.subActive])
-const activities = [
-  ['V萌', 'v_moe'],
-  ['V萌2', 'v_moe_2'],
-  ['V萌V', 'v_moe_5'],
-  ['V萌6', 'v_moe_6'],
-]
+const activities = <Array<[string, string]>>[]
 interface projectData {
   id: string
   name: string
@@ -28,8 +23,9 @@ interface projectData {
 const initedProjectList = ref(false)
 const updateActList = async () => {
   const data = await getActList() as any
-  for(let i of data.list as projectData[]){
+  for (let i of data.list as projectData[]) {
     menuStore.projects[i.id] = i
+    activities.push([i.name, i.id])
   }
   console.log(menuStore.projects)
   initedProjectList.value = true
@@ -47,7 +43,7 @@ function changeRouter(e: Array<string>) {
 }
 function changeTab({ value, id: newTabs }: { value: boolean, id: string }) {
   if (value === false) return
-  if (newTabs === 'tabs1') {
+  if (newTabs === 'tabs1' && initedProjectList) {
     selectTab.value = [activities[0][1]]
     changeStore([activities[0][1]])
   }
