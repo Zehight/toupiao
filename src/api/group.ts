@@ -16,6 +16,12 @@ namespace Group {
 export const add = (params: Group.GroupReqForm) => {
   return axios.post<Group.GroupResData>('/group/add', params);
 }
-export const getGroupList = () => {
-  return axios.post<Group.GroupResData>('/group/getList');
+export const delGroup = (id:string) => {
+  return axios.post<Group.GroupResData>('/group/delInfo', {id});
+}
+export const getGroupList = (id: string) => {
+  return axios.post<Group.GroupResData>('/group/getList', { id });
+}
+export const addRoleToGroup = (groupId: string, roleId: string) => {
+  return axios.post<Group.GroupResData>('/roleInGroup/add', { groupId, roleId });
 }

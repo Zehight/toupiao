@@ -60,19 +60,16 @@
                     </v-row>
                     <v-row>
                         <v-col cols="12" md="2" sm="4">
-                            <v-btn color="pink-lighten-2" @click="readonly = false">
-                                修改信息
+                            <v-btn color="pink-lighten-2" @click="readonly = !readonly">
+                                {{ readonly ? `结束修改信息` : `修改信息` }}
                             </v-btn>
                         </v-col>
                         <v-col cols="12" md="2" sm="4">
-                            <v-btn v-if="alterImg" color="pink-darken-1" @click="alterImg = false" :readonly="loading">
-                                结束图像管理
+                            <v-btn color="pink-lighten-2" @click="alterImg = !alterImg" :readonly="loading">
+                                {{ alterImg ? `结束图像管理` : `图像管理` }}
                                 <template v-slot:loader>
                                     <v-progress-linear indeterminate></v-progress-linear>
                                 </template>
-                            </v-btn>
-                            <v-btn v-else color="pink-lighten-2" @click="alterImg = true">
-                                图像管理
                             </v-btn>
                         </v-col>
                         <v-col cols="12" md="4" sm="4">
@@ -89,8 +86,7 @@
                                     <v-progress-linear indeterminate></v-progress-linear>
                                 </template>
                             </v-btn>
-                            <v-btn v-else color="pink-darken-3"
-                                @click="async () => { await delRole(preRoleInfo.id); dialog = false }">
+                            <v-btn v-else color="pink-darken-3" @click="deleteRole(preRoleInfo.id)">
                                 删除角色
                             </v-btn>
                         </v-col>
@@ -103,10 +99,13 @@
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                <v-btn color="blue-darken-1" variant="text" @click="dialog = false" :loading="loading">
                     关闭
+                    <template v-slot:loader>
+                        <v-progress-linear indeterminate></v-progress-linear>
+                    </template>
                 </v-btn>
-                <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
+                <v-btn color="blue-darken-1" variant="text" @click="dialog = false" :loading="loading">
                     保存
                     <template v-slot:loader>
                         <v-progress-linear indeterminate></v-progress-linear>
@@ -156,7 +155,7 @@ const roleImgId = ref(undefined) as any | string
 const submit = async () => {
     loading.value = true
     const data = await addRoleImg(preRoleInfo.id, roleImgId.value)
-    setTimeout(() => (loading.value = false), 500)
+    setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
     if (roleImg.value[0]) {
@@ -166,11 +165,18 @@ const uploadImg = async (e: any) => {
         })
         const img = await upload(imgForm)
         roleImgId.value = img.id || ''
-        console.log(img);
         setTimeout(submit, 100)
     }
     else {
         roleImgId.value = ''
     }
+}
+const deleteRole = async (id: string) => {
+    loading.value = true
+    const data = await delRole(id)
+    setTimeout(() => {
+        loading.value = false
+        setTimeout(() => { dialog.value = false }, 100)
+    }, 500)
 }
 </script>

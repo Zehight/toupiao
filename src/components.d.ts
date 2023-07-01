@@ -5,10 +5,12 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    InputDialogAddCharacter: typeof import('./components/InputDialogAddCharacter.vue')['default']
+    ConfigDialogProject: typeof import('./components/ConfigDialogProject.vue')['default']
+    ConfigDialogRole: typeof import('./components/ConfigDialogRole.vue')['default']
     InputDialogAddGroup: typeof import('./components/InputDialogAddGroup.vue')['default']
-    InputDialogCreateActivity: typeof import('./components/InputDialogCreateActivity.vue')['default']
-    InputDialogCreateCharacter: typeof import('./components/InputDialogCreateCharacter.vue')['default']
+    InputDialogAddRole: typeof import('./components/InputDialogAddRole.vue')['default']
+    InputDialogCreateProject: typeof import('./components/InputDialogCreateProject.vue')['default']
+    InputDialogCreateRole: typeof import('./components/InputDialogCreateRole.vue')['default']
     InputDialogCreateRound: typeof import('./components/InputDialogCreateRound.vue')['default']
     MyScrool: typeof import('./components/MyScrool.vue')['default']
     NewRoleCard: typeof import('./components/NewRoleCard.vue')['default']
@@ -29,7 +31,7 @@ declare module '@vue/runtime-core' {
     VContainer: typeof import('vuetify/components')['VContainer']
     VDialog: typeof import('vuetify/components')['VDialog']
     VFileInput: typeof import('vuetify/components')['VFileInput']
-    ViewRoleInfoDialog: typeof import('./components/ViewRoleInfoDialog.vue')['default']
+    VIcon: typeof import('vuetify/components')['VIcon']
     ViewRoundCards: typeof import('./components/ViewRoundCards.vue')['default']
     ViewRoundWindow: typeof import('./components/ViewRoundWindow.vue')['default']
     VImg: typeof import('vuetify/components')['VImg']

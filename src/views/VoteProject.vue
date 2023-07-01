@@ -7,7 +7,6 @@
   <TheContainer v-slot="containerProps">
     <v-window v-if="containerProps.store.projects&&containerProps.store.projects[containerProps.store.subActive]" v-model="containerProps.store.subActive">
       <v-window-item v-for="(items,value,i) in containerProps.store.projects" :value="value">
-        {{items.name}}
         <ViewRoundWindow :project-id="items.id"></ViewRoundWindow>
       </v-window-item>
     </v-window>

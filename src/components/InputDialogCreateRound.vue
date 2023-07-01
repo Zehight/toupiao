@@ -2,7 +2,7 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="1024">
             <template v-slot:activator="{ props }">
-                <v-btn color="pink-lighten-3" v-bind="props">
+                <v-btn color="pink-lighten-1" v-bind="props">
                     <slot />
                 </v-btn>
             </template>
@@ -99,7 +99,7 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => (loading.value = false), 500)
+    setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
     if (roundImg.value[0]) {
@@ -108,9 +108,8 @@ const uploadImg = async (e: any) => {
             file: roundImg.value[0],
         })
         const img = await upload(imgForm)
-        console.log(img)
         roundImgID.value = img.id || ''
-        setTimeout(() => (loading.value = false), 500)
+        setTimeout(() => { loading.value = false }, 500)
     }
     else {
         roundImgID.value = ''

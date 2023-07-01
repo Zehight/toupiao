@@ -126,7 +126,7 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => (loading.value = false), 500)
+    setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
     if (roleImg.value[0]) {
@@ -136,8 +136,7 @@ const uploadImg = async (e: any) => {
         })
         const img = await upload(imgForm)
         roleImgId.value = img.id || ''
-        console.log(img);
-        setTimeout(() => (loading.value = false), 500)
+        setTimeout(() => { loading.value = false }, 500)
     }
     else {
         roleImgId.value = ''

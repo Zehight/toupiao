@@ -8,7 +8,7 @@ const prop = defineProps(['roleInfo'])
 <template>
   <v-card class="pa-0 ma-0 h-100" elevation="0">
     <template v-slot:text>
-      <ViewRoleInfoDialog :roleInfo="roleInfo">
+      <ConfigDialogRole :roleInfo="roleInfo">
         <NewRoleCard :data-image="fileUrl(roleInfo.frontImgs[0])" class="ma-0 pa-0" :roleInfo="roleInfo">
           <template #header>
             <h1> {{ roleInfo.name }}</h1>
@@ -20,7 +20,7 @@ const prop = defineProps(['roleInfo'])
             </p>
           </template>
         </NewRoleCard>
-      </ViewRoleInfoDialog>
+      </ConfigDialogRole>
     </template>
   </v-card>
 </template>
