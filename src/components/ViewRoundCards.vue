@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-const prop = defineProps(['groups'])
-
 import OTLIN from '@/assets/chara/OTLIN01.png'
 import OTMAY from '@/assets/chara/OTMAY01.png'
 import OTMIN from '@/assets/chara/OTMIN01.png'
 import OTNIG from '@/assets/chara/OTNIG01.png'
 import OTTAF from '@/assets/chara/OTTAF01.png'
+
+const prop = defineProps(['groups'])
+
 const images = {
   charas: { OTLIN, OTMAY, OTMIN, OTNIG, OTTAF } as any,
   chara: (id: string) => images.charas[id] ? images.charas[id] : OTLIN,
@@ -71,13 +72,14 @@ const names = {
 <style lang="scss" scoped>
 $hoverEasing: cubic-bezier(0.23, 1, 0.32, 1);
 $returnEasing: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
 .card-info h1 {
   font-size: 36px;
   line-height: 36px;
   padding: 1vw;
   font-weight: 700;
   text-shadow: rgba(black, 1) -3px 0px 10px;
-  
+
   @media screen and (max-width: 640px) {
     font-size: 28px;
     line-height: 28px;
