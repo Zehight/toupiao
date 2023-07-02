@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="dialog" persistent width="1024">
+        <v-dialog v-model="dialog" transition="dialog-top-transition" persistent width="1024">
             <template v-slot:activator="{ props }">
                 <v-btn color="pink-lighten-2" v-bind="props">
                     <slot />
@@ -29,10 +29,10 @@
                                     persistent-hint return-object required></v-select>
                             </v-col>
                             <v-col cols="12" sm="6">
-                                <v-select v-model="officialSelect" :items="officialItems" item-title="state"
+                                <v-autocomplete v-model="officialSelect" :items="officialItems" item-title="state"
                                     item-value="abbr" label="所属企划*"
-                                    :hint="`${officialSelect.abbr ? officialSelect.state + ',' + officialSelect.abbr : ''}`"
-                                    persistent-hint return-object required></v-select>
+                                    :hint="`${officialSelect&&officialSelect.abbr ? officialSelect.state + ',' + officialSelect.abbr : ''}`"
+                                    persistent-hint return-object required></v-autocomplete>
                             </v-col>
                             <v-col cols="12" sm="8">
                                 <v-text-field label="备注"></v-text-field>
@@ -40,11 +40,11 @@
                             <v-col cols="12" sm="4">
                                 <v-file-input label="角色封面" v-model="roleImg" @change="uploadImg" chips></v-file-input>
                             </v-col>
-                            <v-col cols="12" sm="8" v-if="roleImgID" class="d-flex">
-                                <div v-for="imgID in [roleImgID]" class="w-50 position-relative rounded-xl ml-3"
+                            <v-col cols="12" sm="8" v-if="roleImgId" class="d-flex">
+                                <div v-for="imgId in [roleImgId]" class="w-50 position-relative rounded-xl ml-3"
                                     style="padding-top: 75%;">
                                     <v-img cover class="position-absolute" aspect-ratio="320/240"
-                                        style="top:0;left: 0;right: 0;bottom: 10%" :src="fileUrl(imgID)">
+                                        style="top:0;left: 0;right: 0;bottom: 10%" :src="fileUrl(imgId)">
                                         <template v-slot:placeholder>
                                             <div class="d-flex align-center justify-center fill-height">
                                                 <v-progress-circular color="grey-lighten-4"
@@ -63,7 +63,8 @@
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="submit" :disabled="loading||disableSubmit()" :loading="loading">
+                    <v-btn color="blue-darken-1" variant="text" @click="submit" :disabled="loading || disableSubmit()"
+                        :loading="loading">
                         提交
                         <template v-slot:loader>
                             <v-progress-linear indeterminate></v-progress-linear>
@@ -75,38 +76,40 @@
     </v-row>
 </template>
 <script lang="ts" setup>
+import { zones } from '@/data/zone'
+import { officials } from '@/data/official'
 import { create } from '@/api/role'
 import { upload, fileUrl } from '@/api/file'
-const zoneItems = [
-    { state: "彩虹赛区", abbr: "NIJ" },
-    { state: "华语赛区", abbr: "CHI" },
-    { state: "英语赛区", abbr: "ENG" },
-    { state: "外卡赛区", abbr: "WIL" },
-    { state: "大物赛区", abbr: "BIG" },
-]
+const initZone = () => {
+    let items = []
+    for(let z in zones){
+        if(zones[z].abbr){
+            items.push({state:zones[z].name,abbr:zones[z].abbr})
+        }
+    }
+    return items
+}
+const initOfficial = () => {
+    let items = []
+    for(let o in officials){
+        if(officials[o].abbr){
+            items.push({state:officials[o].name,abbr:officials[o].abbr,parent:officials[o].parent})
+        }
+    }
+    return items
+}
+const zoneItems = initZone()
+const officialItems = initOfficial()
 const zoneSelect = ref([]) as any | Object
-const officialItems = [
-    { state: "彩虹社(本社)", abbr: "NJ" },
-    { state: "彩虹社(EN)", abbr: "NE", parent: "NJ" },
-    { state: "VirtuaReal", abbr: "VR" },
-    { state: "A-SOUL", abbr: "AS" },
-    { state: "完美世界", abbr: "PW" },
-    { state: "Tencent", abbr: "TE" },
-    { state: "虚研社", abbr: "XY" },
-    { state: "Amalis", abbr: "AM" },
-    { state: "Hololive", abbr: "HO" },
-    { state: "帕里坡", abbr: "PR" },
-    { state: "其他", abbr: "OT" },
-]
 const officialSelect = ref([]) as any | Object
 const roleName = ref(undefined) as any | string
 const roleOriginalName = ref(undefined) as any | string
 const roleAbbr = ref(undefined) as any | string
 const roleImg = ref(undefined) as any | [File?]
-const roleImgID = ref('')
+const roleImgId = ref('')
 const dialog = ref(false)
 const loading = ref(false)
-const disableSubmit = ()=>{
+const disableSubmit = () => {
     return !roleName.value || !roleAbbr.value
 }
 const submit = async () => {
@@ -115,7 +118,7 @@ const submit = async () => {
         code: officialSelect.value.abbr + roleAbbr.value,
         name: roleName.value,
         originalName: roleOriginalName.value || undefined,
-        frontImg: roleImgID.value,
+        frontImg: roleImgId.value,
         official: officialSelect.value.abbr,
         parentOfficial: officialSelect.value.parent,
         zone: zoneSelect.value.abbr,
@@ -123,7 +126,7 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => (loading.value = false), 500)
+    setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
     if (roleImg.value[0]) {
@@ -132,12 +135,11 @@ const uploadImg = async (e: any) => {
             file: roleImg.value[0],
         })
         const img = await upload(imgForm)
-        roleImgID.value = img.id || ''
-        console.log(img);
-        setTimeout(() => (loading.value = false), 500)
+        roleImgId.value = img.id || ''
+        setTimeout(() => { loading.value = false }, 500)
     }
     else {
-        roleImgID.value = ''
+        roleImgId.value = ''
     }
 }
 </script>

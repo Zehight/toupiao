@@ -1,6 +1,6 @@
 <template>
     <v-row justify="center">
-        <v-dialog v-model="dialog" persistent width="1024">
+        <v-dialog v-model="dialog" transition="dialog-top-transition" persistent width="1024">
             <template v-slot:activator="{ props }">
                 <v-btn color="pink-lighten-2" v-bind="props">
                     <slot />
@@ -48,9 +48,6 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="test">
-                        测试
-                    </v-btn>
                     <v-btn color="blue-darken-1" variant="text" @click="dialog = false">
                         关闭
                     </v-btn>
@@ -66,7 +63,7 @@
     </v-row>
 </template>
 <script lang="ts" setup>
-import { create, getActList } from '@/api/activity'
+import { create } from '@/api/activity'
 import { upload, fileUrl } from '@/api/file'
 const actName = ref(undefined) as any | string
 const startTime = ref(undefined) as any | string
@@ -78,7 +75,7 @@ const dialog = ref(false)
 const loading = ref(false)
 const rules = {
     require: (value: any) => !!value || '该项目不能为空',
-    isDate: (value: any) => /[0-9]{2,4}-[0-9]{1,2}-[0-9]{1,2}/.test(value) || '请填写如同“2018-12-1”的数据',
+    isDate: (value: any) => /[0-9]{2,4}-[0-9]{2}-[0-9]{2}/.test(value) || '请填写如同“2018-12-01”的数据',
     end: (value: any) => !startTime.value || Date.parse(value) > Date.parse(startTime.value) || '必须在开始时间之后',
 }
 const disableSubmit = ()=>{
@@ -96,11 +93,7 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => (loading.value = false), 500)
-}
-const test = async () => {
-    const data = await getActList()
-    console.log(data);
+    setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
     if (actImg.value[0]) {
@@ -110,8 +103,7 @@ const uploadImg = async (e: any) => {
         })
         const img = await upload(imgForm)
         actImgID.value = img.id || ''
-        console.log(img);
-        setTimeout(() => (loading.value = false), 500)
+        setTimeout(() => { loading.value = false }, 500)
     }
     else {
         actImgID.value = ''
