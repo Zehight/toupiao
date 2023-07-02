@@ -31,7 +31,6 @@ declare module '@vue/runtime-core' {
     VContainer: typeof import('vuetify/components')['VContainer']
     VDialog: typeof import('vuetify/components')['VDialog']
     VFileInput: typeof import('vuetify/components')['VFileInput']
-    VIcon: typeof import('vuetify/components')['VIcon']
     ViewRoundCards: typeof import('./components/ViewRoundCards.vue')['default']
     ViewRoundWindow: typeof import('./components/ViewRoundWindow.vue')['default']
     VImg: typeof import('vuetify/components')['VImg']

@@ -14,13 +14,14 @@
                     <v-container>
                         <v-row>
                             <v-col cols="12" sm="9" md="5">
-                                <v-text-field label="新角色名称*" v-model="roleName" required></v-text-field>
+                                <v-text-field label="新角色名称*" v-model="roleName" :readonly="loading" required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="9" md="5">
                                 <v-text-field label="新角色外文名称" v-model="roleOriginalName" hint="没有则不填"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="3" md="2">
-                                <v-text-field label="名称简写*" v-model="roleAbbr" hint="由三个大写字母组成" required></v-text-field>
+                                <v-text-field label="名称简写*" v-model="roleAbbr" hint="由三个大写字母组成" :readonly="loading"
+                                    required></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6">
                                 <v-select v-model="zoneSelect" :items="zoneItems" item-title="state" item-value="abbr"
@@ -31,14 +32,15 @@
                             <v-col cols="12" sm="6">
                                 <v-autocomplete v-model="officialSelect" :items="officialItems" item-title="state"
                                     item-value="abbr" label="所属企划*"
-                                    :hint="`${officialSelect&&officialSelect.abbr ? officialSelect.state + ',' + officialSelect.abbr : ''}`"
+                                    :hint="`${officialSelect && officialSelect.abbr ? officialSelect.state + ',' + officialSelect.abbr : ''}`"
                                     persistent-hint return-object required></v-autocomplete>
                             </v-col>
                             <v-col cols="12" sm="8">
-                                <v-text-field label="备注"></v-text-field>
+                                <v-text-field label="备注" :readonly="loading"></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="4">
-                                <v-file-input label="角色封面" v-model="roleImg" @change="uploadImg" chips></v-file-input>
+                                <v-file-input label="角色封面" v-model="roleImg" @change="uploadImg" :readonly="loading"
+                                    chips></v-file-input>
                             </v-col>
                             <v-col cols="12" sm="8" v-if="roleImgId" class="d-flex">
                                 <div v-for="imgId in [roleImgId]" class="w-50 position-relative rounded-xl ml-3"
@@ -80,20 +82,21 @@ import { zones } from '@/data/zone'
 import { officials } from '@/data/official'
 import { create } from '@/api/role'
 import { upload, fileUrl } from '@/api/file'
+const prop = defineProps(['update'])
 const initZone = () => {
     let items = []
-    for(let z in zones){
-        if(zones[z].abbr){
-            items.push({state:zones[z].name,abbr:zones[z].abbr})
+    for (let z in zones) {
+        if (zones[z].abbr) {
+            items.push({ state: zones[z].name, abbr: zones[z].abbr })
         }
     }
     return items
 }
 const initOfficial = () => {
     let items = []
-    for(let o in officials){
-        if(officials[o].abbr){
-            items.push({state:officials[o].name,abbr:officials[o].abbr,parent:officials[o].parent})
+    for (let o in officials) {
+        if (officials[o].abbr) {
+            items.push({ state: officials[o].name, abbr: officials[o].abbr, parent: officials[o].parent })
         }
     }
     return items
@@ -126,7 +129,10 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => { loading.value = false }, 500)
+    prop.update()
+    setTimeout(() => {
+        loading.value = false
+    }, 500)
 }
 const uploadImg = async (e: any) => {
     if (roleImg.value[0]) {

@@ -61,7 +61,7 @@
                     <v-row>
                         <v-col cols="12" md="2" sm="4">
                             <v-btn color="pink-lighten-2" @click="readonly = !readonly">
-                                {{ readonly ? `结束修改信息` : `修改信息` }}
+                                {{ readonly ? `修改信息` : `结束修改信息` }}
                             </v-btn>
                         </v-col>
                         <v-col cols="12" md="2" sm="4">
@@ -120,7 +120,7 @@ import { delRole, addRoleImg } from '@/api/role'
 import { upload, fileUrl } from '@/api/file'
 import { zones } from '@/data/zone'
 import { officials } from '@/data/official'
-const prop = defineProps(['roleInfo'])
+const prop = defineProps(['roleInfo', 'update'])
 const dialog = ref(false)
 const readonly = ref(true)
 const alterImg = ref(false)
@@ -173,10 +173,12 @@ const uploadImg = async (e: any) => {
 }
 const deleteRole = async (id: string) => {
     loading.value = true
+    readonly.value = true
     const data = await delRole(id)
+    prop.update()
     setTimeout(() => {
         loading.value = false
         setTimeout(() => { dialog.value = false }, 100)
-    }, 500)
+    }, 400)
 }
 </script>

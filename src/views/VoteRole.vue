@@ -9,30 +9,19 @@ interface roleData {
   official: string
   frontImgs: string[]
 }
-const roleList = ref([]) as any
-const roleStore = reactive({}) as Record<string, roleData>
+const roleList = ref([] as roleData[])
 const initedList = ref(false)
 const updateRoleList = async () => {
   const data = await getRoleList() as any
-  roleList.value = data.list.filter((v: any) => v.code.replace(" ", ""))
-  for (let v of roleList.value) {
-    getStoreRoleInfo(v)
-  }
+  roleList.value = data.list
   initedList.value = true
-}
-const getStoreRoleInfo = async (info: roleData) => {
-  if (!info.code || !info.frontImgs.length) return
-  if (!roleStore[info.code]) {
-    roleStore[info.code] = info
-  }
-  return roleStore[info.code]
 }
 updateRoleList()
 </script>
 
 
 <template>
-  <TheContainer v-slot="containerProps">
+  <TheContainer v-slot="container" :update-role="updateRoleList">
     <v-window width="100%">
       <v-btn color="blue-darken-1" variant="text" @click="updateRoleList">
         刷新
@@ -41,8 +30,8 @@ updateRoleList()
         <template v-slot:title>
         </template>
         <v-list class="d-flex flex-wrap" rounded-0 width="100%">
-          <v-list-item v-for="(chara, charaIndex) in roleStore" :key="charaIndex" class="ma-0 pa-0 roleInfoCard">
-            <RoleInfoCard v-if="chara.frontImgs.length" :roleInfo="chara"></RoleInfoCard>
+          <v-list-item v-for="(chara, charaIndex) in roleList" :key="charaIndex" class="ma-0 pa-0 roleInfoCard">
+            <RoleInfoCard v-if="chara.frontImgs.length" :roleInfo="chara" :update="updateRoleList"></RoleInfoCard>
           </v-list-item>
         </v-list>
       </v-card>

@@ -2,7 +2,7 @@
     <v-row justify="center">
         <v-dialog v-model="dialog" persistent width="1024">
             <template v-slot:activator="{ props }">
-                <v-btn color="pink-lighten-1" v-bind="props">
+                <v-btn color="blue-lighten-1" v-bind="props">
                     <slot />
                 </v-btn>
             </template>
@@ -69,7 +69,7 @@
 <script lang="ts" setup>
 import { create } from '@/api/round'
 import { upload, fileUrl } from '@/api/file'
-const prop = defineProps(['projectId'])
+const prop = defineProps(['projectId','update'])
 const modelItems = ['正赛', '海选赛', '表演赛']
 const modelSelect = ref([]) as any | string
 const roundName = ref(undefined) as any | string
@@ -96,9 +96,9 @@ const submit = async () => {
         frontImg: roundImgID.value ? roundImgID.value : '',
         remark: roundRemark.value,
     })
-    console.log(createForm);
     const data = await create(createForm)
     console.log(data);
+    prop.update(prop.projectId)
     setTimeout(() => { loading.value = false }, 500)
 }
 const uploadImg = async (e: any) => {
