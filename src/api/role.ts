@@ -5,7 +5,8 @@ namespace Role {
     code: Uppercase<string>;
     zone: Uppercase<string>;
     name: string;
-    official: [string] | [string, string];
+    official: string;
+    parentOfficial?: string;
     originalName?: string;
     frontImg: string;
   }
@@ -21,6 +22,9 @@ namespace Role {
 // 角色上传
 export const create = (params: Role.RoleReqForm) => {
   return axios.post<Role.RoleResData>('/role/add', params);
+}
+export const delRole = (id:string) => {
+  return axios.post<Role.RoleResData>('/role/delInfo', {id});
 }
 export const getRoleList = () => {
   return axios.post<Role.RoleListData>('/role/getList');

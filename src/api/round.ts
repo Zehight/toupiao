@@ -3,6 +3,7 @@ namespace Round {
   // 活动创建表单
   export interface RoundReqForm {
     name: string;
+    projectId: string;
     showTime: string;
     startVoteTime: string;
     endVoteTime: string;
@@ -18,6 +19,12 @@ namespace Round {
 export const create = (params: Round.RoundReqForm) => {
   return axios.post<Round.RoundResData>('/round/add', params);
 }
-export const getRoundList = () => {
-  return axios.post<Round.RoundResData>('/round/getList');
+export const delRound = (id:string) => {
+  return axios.post<Round.RoundResData>('/round/delInfo', {id});
+}
+export const getRoundList = (id: string) => {
+  return axios.post<Round.RoundResData>('/round/getList', { id });
+}
+export const getRoundInfo = (id: string) => {
+  return axios.post<Round.RoundResData>('/round/getInfo', { id });
 }

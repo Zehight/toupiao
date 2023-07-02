@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { getRoleList, getRoleInfo } from '@/api/role'
-import { fileUrl } from '@/api/file'
 interface roleData {
   id: string
   name: string
@@ -14,87 +13,69 @@ const roleList = ref([]) as any
 const roleStore = reactive({}) as Record<string, roleData>
 const initedList = ref(false)
 const updateRoleList = async () => {
-  const list = await getRoleList() as any
-  roleList.value = list.list.filter((v: any) => v.code.replace(" ", ""))
+  const data = await getRoleList() as any
+  roleList.value = data.list.filter((v: any) => v.code.replace(" ", ""))
   for (let v of roleList.value) {
-    getStoreRoleInfo(v.id)
+    getStoreRoleInfo(v)
   }
   initedList.value = true
 }
-const getStoreRoleInfo = async (id: string) => {
-  const info = await getRoleInfo(id) as any
-  const data = info.data as roleData
-  if (!data.code || !data.frontImgs.length) return
-  if (!roleStore[data.code]) {
-    roleStore[data.code] = data
+const getStoreRoleInfo = async (info: roleData) => {
+  if (!info.code || !info.frontImgs.length) return
+  if (!roleStore[info.code]) {
+    roleStore[info.code] = info
   }
-  console.log(data, roleStore)
-  return roleStore[data.code]
+  return roleStore[info.code]
 }
 updateRoleList()
-interface chara {
-  code: Uppercase<string>;
-  zone: Uppercase<string>;
-  name: string;
-  originalName?: string;
-  official: [string] | [string, string];
-  imageIDs: {}[];
-  history: {};
-  remark?: string;
-}
-const characters: chara[] = [
-  {
-    code: 'OTLIN',
-    zone: 'CHI',
-    name: '凜凜蝶凜',
-    official: ['OT'],
-    imageIDs: ['……'],
-    history: {},
-  }, {
-    code: 'OTMAY',
-    zone: 'CHI',
-    name: '麻尤米Mayumi',
-    official: ['OT'],
-    imageIDs: ['……'],
-    history: {},
-  }, {
-    code: 'HEGAW',
-    zone: 'ENG',
-    name: '噶呜·古拉',
-    originalName: 'Gawr Gura',
-    official: ['HO', 'HE'],
-    imageIDs: ['……'],
-    history: {},
-  }
-]
 </script>
 
 
 <template>
-  <TheContainer>
-    <h1>全部角色</h1>
-    <v-window>
+  <TheContainer v-slot="containerProps">
+    <v-window width="100%">
       <v-btn color="blue-darken-1" variant="text" @click="updateRoleList">
-        测试
+        刷新
       </v-btn>
-    </v-window>
-    <v-card variant="tonal" class="ma-0 pa-0" cols="12">
-      <template v-slot:title>
-        <v-list v-if="initedList" class="d-flex flex-wrap" rounded-0>
-          <v-list-item v-for="(chara, charaIndex) in roleStore" :key="charaIndex">
-            <v-card v-if="chara.frontImgs.length" variant="tonal" class=" ma-0 pa-0" height="26.5vw" width="20vw">
-              <RoleInfoCard :roleInfo="chara"></RoleInfoCard>
-            </v-card>
+      <v-card v-if="initedList" class="ma-0 pa-0" width="100%">
+        <template v-slot:title>
+        </template>
+        <v-list class="d-flex flex-wrap" rounded-0 width="100%">
+          <v-list-item v-for="(chara, charaIndex) in roleStore" :key="charaIndex" class="ma-0 pa-0 roleInfoCard">
+            <RoleInfoCard v-if="chara.frontImgs.length" :roleInfo="chara"></RoleInfoCard>
           </v-list-item>
         </v-list>
-      </template>
-    </v-card>
+      </v-card>
+      <v-card v-else>
+        <h1>加载中</h1>
+      </v-card>
+    </v-window>
   </TheContainer>
 </template>
 
 
 
-<style scoped></style>
+<style lang="scss" scoped>
+.roleInfoCard {
+  width: 16.6%;
+
+  @media screen and (max-width: 640px) {
+    width: 50%;
+  }
+
+  @media screen and (min-width: 640px) and (max-width: 1024px) {
+    width: 33%;
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1440px) {
+    width: 25%;
+  }
+
+  @media screen and (min-width: 1440px) and (max-width: 1980px) {
+    width: 20%;
+  }
+}
+</style>
 
 
 
