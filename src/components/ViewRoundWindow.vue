@@ -34,11 +34,7 @@ initRoundList(prop.projectId)
       <v-tab :value="index">{{ roundItem.name }}</v-tab>
     </div>
     <div class="d-flex justify-center ml-8 mt-4">
-      <InputDialogCreateRound :projectId="projectId">添加轮次</InputDialogCreateRound>
-      <v-spacer></v-spacer>
-      <v-row class="ml-5">
-        <v-btn color="blue-lighten-1" @click="initRoundList(projectId)">刷新轮次</v-btn>
-      </v-row>
+      <InputDialogCreateRound :projectId="projectId" :update="initRoundList">添加轮次</InputDialogCreateRound>
     </div>
   </v-tabs>
   <v-window v-model="roundTab" style="height: 100%;">

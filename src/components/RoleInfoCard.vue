@@ -2,13 +2,13 @@
 import { fileUrl } from '@/api/file'
 import { zones } from '@/data/zone'
 import { officials } from '@/data/official'
-const prop = defineProps(['roleInfo'])
+const prop = defineProps(['roleInfo','update'])
 </script>
 
 <template>
   <v-card class="pa-0 ma-0 h-100" elevation="0">
     <template v-slot:text>
-      <ConfigDialogRole :roleInfo="roleInfo">
+      <ConfigDialogRole :roleInfo="roleInfo" :update="update">
         <NewRoleCard :data-image="fileUrl(roleInfo.frontImgs[0])" class="ma-0 pa-0" :roleInfo="roleInfo">
           <template #header>
             <h1> {{ roleInfo.name }}</h1>

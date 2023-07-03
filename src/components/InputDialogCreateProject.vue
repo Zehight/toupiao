@@ -65,6 +65,7 @@
 <script lang="ts" setup>
 import { create } from '@/api/activity'
 import { upload, fileUrl } from '@/api/file'
+const prop = defineProps(['update'])
 const actName = ref(undefined) as any | string
 const startTime = ref(undefined) as any | string
 const endTime = ref(undefined) as any | string
@@ -93,7 +94,10 @@ const submit = async () => {
     console.log(createForm);
     const data = await create(createForm)
     console.log(data);
-    setTimeout(() => { loading.value = false }, 500)
+    prop.update()
+    setTimeout(() => {
+        loading.value = false
+    }, 500)
 }
 const uploadImg = async (e: any) => {
     if (actImg.value[0]) {
