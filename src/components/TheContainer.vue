@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { useMenu } from '@/modules/store'
 import { getActList, getActInfo } from '@/api/activity'
 import { zones } from '@/data/zone'
+const prop = defineProps(['updateRole'])
 
 const router = useRouter()
 const menuStore = useMenu()
@@ -79,7 +80,7 @@ updateActList()
               <v-list-item-title class="text-h5">全部活动</v-list-item-title>
             </v-list-item>
           </template>
-          <InputDialogCreateProject class="mt-0 mb-3">创建活动</InputDialogCreateProject>
+          <InputDialogCreateProject class="mt-0 mb-3" :update="updateActList">创建活动</InputDialogCreateProject>
           <v-list-item v-for="(item, value, i) in menuStore.projects" class="justify-center pa-2" color="blue"
             :key="i" :value="value">
             <v-list-item-title>{{ item.name }}<ConfigDialogProject :project-info="item" :update="updateActList">配置</ConfigDialogProject></v-list-item-title>
@@ -91,7 +92,7 @@ updateActList()
               <v-list-item-title class="text-h5">全部角色</v-list-item-title>
             </v-list-item>
           </template>
-          <InputDialogCreateRole class="mt-0 mb-3">创建角色</InputDialogCreateRole>
+          <InputDialogCreateRole class="mt-0 mb-3" :update="updateRole">创建角色</InputDialogCreateRole>
           <v-list-item v-for="({ name, abbr }, value, i) in zones" class="justify-center pa-2" color="blue" :key="i"
             :value="abbr" :title="name"></v-list-item>
         </v-list-group>

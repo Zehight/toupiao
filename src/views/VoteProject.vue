@@ -4,9 +4,9 @@
 
 
 <template>
-  <TheContainer v-slot="containerProps">
-    <v-window v-if="containerProps.store.projects&&containerProps.store.projects[containerProps.store.subActive]" v-model="containerProps.store.subActive">
-      <v-window-item v-for="(items,value,i) in containerProps.store.projects" :value="value">
+  <TheContainer v-slot="container">
+    <v-window v-if="container.store.projects&&container.store.projects[container.store.subActive]" v-model="container.store.subActive">
+      <v-window-item v-for="(items,value,i) in container.store.projects" :value="value">
         <ViewRoundWindow :project-id="items.id"></ViewRoundWindow>
       </v-window-item>
     </v-window>

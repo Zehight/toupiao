@@ -15,7 +15,6 @@ const deleteGroup = async (id: string) => {
   if (data.data == "successful") deleted.value = true;
 }
 const initGroupList = async (id: string) => {
-    console.log(id);
   const data = await getRoundInfo(id) as any
   round.value = data.data
   groupList.value = round.value.groupList
@@ -29,7 +28,6 @@ initGroupList(prop.roundId)
   <v-card class="pa-0 ma-0 " elevation="0">
     <template v-slot:title>
       <v-row class="ml-5 pa-1">
-        <v-btn color="green-lighten-1" class="ma-1" @click="initGroupList(roundId)">刷新</v-btn>
         <v-btn variant="tonal" class="ma-1">推送</v-btn>
         <v-btn variant="tonal" class="ma-1">冻结</v-btn>
       </v-row>
