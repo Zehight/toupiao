@@ -1,4 +1,16 @@
 <template>
+    <v-dialog v-model="predeleted" width="auto">
+        <v-card>
+            <v-card-text>
+                {{ deleted ? `角色删除成功~` : (deleting ? `正在删除` : `是否删除角色${roleInfo.name}？`) }}
+            </v-card-text>
+            <v-card-actions>
+                <v-btn v-if="!deleted" color="primary" @click="deleteRole(roleInfo.id)" :disabled="deleting">删除</v-btn>
+                <v-btn v-if="!deleted" color="primary" @click="predeleted = false" :disabled="deleting">取消</v-btn>
+                <v-btn v-else color="primary" block @click="confirmDelete">确认</v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
     <v-dialog v-model="dialog" width="900">
         <template v-slot:activator="{ props }">
             <div @click="dialog = true">
@@ -86,8 +98,8 @@
                                     <v-progress-linear indeterminate></v-progress-linear>
                                 </template>
                             </v-btn>
-                            <v-btn v-else color="pink-darken-3" @click="deleteRole(preRoleInfo.id)">
-                                删除角色
+                            <v-btn v-else color="pink-darken-3" @click="predeleted = true">
+                                {{ deleting ? `正在删除` : `删除角色` }}
                             </v-btn>
                         </v-col>
                         <v-col cols="12">
@@ -124,6 +136,9 @@ const prop = defineProps(['roleInfo', 'update'])
 const dialog = ref(false)
 const readonly = ref(true)
 const alterImg = ref(false)
+const deleting = ref(false)
+const deleted = ref(false)
+const predeleted = ref(false)
 const preRoleInfo = reactive({ ...prop.roleInfo })
 const initZone = () => {
     let items = []
@@ -174,11 +189,18 @@ const uploadImg = async (e: any) => {
 const deleteRole = async (id: string) => {
     loading.value = true
     readonly.value = true
+    deleting.value = true
     const data = await delRole(id)
     prop.update()
     setTimeout(() => {
         loading.value = false
+        deleting.value = false
+        deleted.value = true
         setTimeout(() => { dialog.value = false }, 100)
     }, 400)
+}
+const confirmDelete = () => {
+    predeleted.value = false
+    setTimeout(() => { dialog.value = false }, 80)
 }
 </script>

@@ -22,7 +22,6 @@ const initRoundList = async (id: string) => {
   deleted.value = false;
 }
 initRoundList(prop.projectId)
-
 </script>
 
 <template>
@@ -43,12 +42,11 @@ initRoundList(prop.projectId)
         <v-dialog v-model="predeleted" width="auto">
           <v-card>
             <v-card-text>
-              {{ deleted ? `轮次删除成功~` : (deleting ? `正在删除` : `是否确认删除${roundItem.name}？`) }}
+              {{ deleted ? `轮次删除成功~` : (deleting ? `正在删除` : `是否删除组别${roundItem.name}？`) }}
             </v-card-text>
             <v-card-actions>
-              <v-btn v-if="!deleted" color="primary" @click="deleteRound(roundItem.id)"
-                :disabled="deleting">删除</v-btn>
-              <v-btn v-if="!deleted" color="primary" @click="predeleted = false" :disabled="deleting">关闭</v-btn>
+              <v-btn v-if="!deleted" color="primary" @click="deleteRound(roundItem.id)" :disabled="deleting">删除</v-btn>
+              <v-btn v-if="!deleted" color="primary" @click="predeleted = false" :disabled="deleting">取消</v-btn>
               <v-btn v-else color="primary" block @click="initRoundList(projectId); predeleted = false">确认</v-btn>
             </v-card-actions>
           </v-card>
@@ -56,7 +54,7 @@ initRoundList(prop.projectId)
         <div class="d-flex align-center pa-2">
           <span class="text-h5">{{ roundItem.name }}</span>
           <v-row class="ml-4">
-            <v-btn color="red-darken-2" @click="predeleted = true">
+            <v-btn color="red-darken-2" @click="predeleted = true" variant="outlined">
               {{ deleting ? `正在删除` : `删除轮次` }}
             </v-btn>
           </v-row>
