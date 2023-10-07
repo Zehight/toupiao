@@ -14,14 +14,14 @@ const deleteGroup = async (id: string) => {
   deleting.value = false;
   if (data.data == "successful") deleted.value = true;
 }
-const initGroupList = async (id: string) => {
-  const data = await getRoundInfo(id) as any
+const initGroupList = async () => {
+  const data = await getRoundInfo(prop.roundId) as any
   round.value = data.data
   groupList.value = round.value.groupList
   deleting.value = false;
   deleted.value = false;
 }
-initGroupList(prop.roundId)
+initGroupList()
 </script>
 
 <template>
@@ -39,7 +39,7 @@ initGroupList(prop.roundId)
             组别删除成功~
           </v-card-text>
           <v-card-actions>
-            <v-btn color="primary" block @click="initGroupList(roundId)">关闭</v-btn>
+            <v-btn color="primary" block @click="initGroupList()">关闭</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -49,7 +49,7 @@ initGroupList(prop.roundId)
             <template v-slot:title>
               <div class="d-flex">
                 {{ groupItem.name }}
-                <InputDialogAddRole :group-id="groupItem.id">投入角色</InputDialogAddRole>
+                <InputDialogAddRole :group-id="groupItem.id" :update="initGroupList">投入角色</InputDialogAddRole>
                 <v-row class="ml-4 mt-1">
                   <v-btn color="red-darken-4" variant="outlined" @click="deleteGroup(groupItem.id)" :disabled="deleting">
                     {{ deleting ? `正在删除` : `删除组别` }}

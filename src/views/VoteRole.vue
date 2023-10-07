@@ -9,29 +9,67 @@ interface roleData {
   official: string
   frontImgs: string[]
 }
+const filtering = ref(false)
+const filterStore = ref(undefined as any)
+const queryText = ref(undefined as any)
 const roleList = ref([] as roleData[])
+const filteredRoleList = ref([] as roleData[])
 const initedList = ref(false)
 const updateRoleList = async () => {
   const data = await getRoleList() as any
   roleList.value = data.list
   initedList.value = true
 }
+const filterRole = () => {
+  if (!filtering.value) {
+    return roleList.value
+  }
+  else {
+    return roleList.value.filter(chara => {
+      if (filterStore.value) {
+        if (filterStore.value.subActive !== chara.zone) {
+          return false
+        }
+      }
+      if (queryText.value) {
+        let qt = new RegExp(queryText.value, 'i')
+        if (qt.test(chara.code)) {
+          return true
+        }
+        if (qt.test(chara.name)) {
+          return true
+        }
+        if (chara.originalName && qt.test(chara.originalName)) {
+          return true
+        }
+      }
+      else {
+        return true
+      }
+      return false
+    }
+    )
+  }
+}
 updateRoleList()
 </script>
-
 
 <template>
   <TheContainer v-slot="container" :update-role="updateRoleList">
     <v-window width="100%">
-      <v-btn color="blue-darken-1" variant="text" @click="updateRoleList">
-        刷新
-      </v-btn>
-      <v-card v-if="initedList" class="ma-0 pa-0" width="100%">
+      <v-card v-if="container.store && initedList" class="ma-0 pa-0" width="100%">
         <template v-slot:title>
+          <v-row>
+            <v-col cols="4" sm="3" lg="2" class="ml-3"><v-switch label="进一步筛选" v-model="filtering"
+                @click="filterStore = container.store"></v-switch></v-col>
+            <v-col v-if="filtering" cols="6" sm="5" lg="4" class="ml-3"><v-text-field label="搜索名称或代号" v-model="queryText"
+                color="pink" clearable></v-text-field></v-col>
+          </v-row>
         </template>
         <v-list class="d-flex flex-wrap" rounded-0 width="100%">
-          <v-list-item v-for="(chara, charaIndex) in roleList" :key="charaIndex" class="ma-0 pa-0 roleInfoCard">
-            <RoleInfoCard v-if="chara.frontImgs.length" :roleInfo="chara" :update="updateRoleList"></RoleInfoCard>
+          <v-list-item v-for="(chara, charaIndex) in filterRole()" :key="charaIndex" class="ma-0 pa-0 roleInfoCard">
+            <RoleInfoCard v-if="chara.frontImgs.length" :roleInfo="chara" :update="updateRoleList"
+              :filter="[filtering, queryText]"></RoleInfoCard>
           </v-list-item>
         </v-list>
       </v-card>

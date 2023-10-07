@@ -31,7 +31,7 @@
                 </v-btn>
                 <v-btn color="blue-darken-1" variant="text" @click="submit" :disabled="loading || disableSubmit()"
                     :loading="loading">
-                    保存
+                    添加
                     <template v-slot:loader>
                         <v-progress-linear indeterminate></v-progress-linear>
                     </template>
@@ -43,21 +43,23 @@
 <script lang="ts" setup>
 import { addRoleToGroup } from '@/api/group'
 import { getRoleList } from '@/api/role'
-const prop = defineProps(['groupId'])
+const prop = defineProps(['groupId', 'update'])
 const roleSelect = ref([]) as any
 const roleItems = ref([]) as any
 const dialog = ref(false)
 const readonly = ref(true)
 const loading = ref(false)
 const disableSubmit = () => {
-    console.log(roleSelect.value)
     return !roleSelect.value.id
 }
 const submit = async () => {
     loading.value = true
     const data = await addRoleToGroup(prop.groupId, roleSelect.value.id)
     console.log(data);
-    setTimeout(() => { loading.value = false }, 500)
+    setTimeout(() => {
+        prop.update()
+        loading.value = false
+    }, 500)
 }
 const initRoleList = async () => {
     loading.value = true

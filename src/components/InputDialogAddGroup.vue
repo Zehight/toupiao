@@ -80,7 +80,7 @@ const submit = async () => {
             submit()
         }
         else {
-            prop.update(prop.roundId)
+            prop.update()
             loading.value = false
         }
     }, 500)
